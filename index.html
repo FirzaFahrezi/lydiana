@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Fashion Sales Management System</title>
+<title>Lydiana Thrifting</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
@@ -39,8 +39,8 @@ th{background:#1E3A8A;color:#fff;position:sticky;top:0}
 <body>
 <div class="container">
 <div class="header">
-<h1>Fashion Sales Management System</h1>
-<p>Kelola transaksi penjualan baju, celana, jaket, sepatu, dan aksesoris fashion dengan mudah.</p>
+<h1>Lydiana Thrifting</h1>
+<p>Kelola transaksi penjualan baju dan celana dengan mudah.</p>
 </div>
 
 <div id="toast" class="toast"></div>
@@ -89,11 +89,6 @@ th{background:#1E3A8A;color:#fff;position:sticky;top:0}
 </div>
 
 <script>
-let transactions = JSON.parse(localStorage.getItem('transactions')) || [
-{date:new Date().toLocaleDateString('id-ID'),customer:'Andi',product:'Jaket Hoodie',category:'Jaket',size:'L',qty:2,price:250000},
-{date:new Date().toLocaleDateString('id-ID'),customer:'Rina',product:'Sepatu Casual',category:'Sepatu',size:'XL',qty:1,price:450000}
-];
-
 const rupiah=n=>new Intl.NumberFormat('id-ID',{style:'currency',currency:'IDR'}).format(n);
 
 function toast(msg){
