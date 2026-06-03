@@ -1,180 +1,293 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lydiana Thrifting</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:Poppins,sans-serif;background:linear-gradient(135deg,#1E3A8A,#7C3AED);min-height:100vh;padding:20px}
-.container{max-width:1400px;margin:auto}
-.header{text-align:center;color:#fff;margin-bottom:25px}
-.header h1{font-size:2.2rem}
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px;margin-bottom:25px}
-.card,.form-box,.table-box{background:#fff;border-radius:20px;box-shadow:0 10px 25px rgba(0,0,0,.15)}
-.card{padding:25px;transition:.3s}
-.card:hover{transform:translateY(-4px)}
-.card i{font-size:30px;color:#7C3AED;margin-bottom:10px}
-.card h3{color:#666}
-.card h2{color:#1E3A8A;margin-top:10px}
-.form-box,.table-box{padding:25px}
-.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px}
-input,select{padding:12px;border:1px solid #ddd;border-radius:12px;width:100%}
-input:focus,select:focus{outline:none;border-color:#7C3AED}
-.btn{background:linear-gradient(135deg,#1E3A8A,#7C3AED);color:#fff;border:none;padding:12px 18px;border-radius:12px;cursor:pointer;font-weight:600}
-.btn-danger{background:#dc2626}
-.actions{display:flex;gap:10px;margin-top:15px;flex-wrap:wrap}
-.table-box{overflow:auto}
-table{width:100%;border-collapse:collapse}
-th,td{padding:12px;border:1px solid #eee;text-align:center}
-th{background:#1E3A8A;color:#fff;position:sticky;top:0}
-.toast{display:none;background:#dcfce7;color:#166534;padding:12px;border-radius:12px;margin-bottom:15px}
-.search{margin-bottom:15px}
-.empty{padding:20px;color:#777}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lydiana Thrifting | Dashboard</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    
+    <style>
+        body { font-family: 'Poppins', sans-serif; }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #1e3a8a 0%, #7c3aed 100%);
+            background-attachment: fixed;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6 0%, #7c3aed 100%);
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(124, 58, 237, 0.4);
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
 </head>
-<body>
-<div class="container">
-<div class="header">
-<h1>Lydiana Thrifting</h1>
-<p>Kelola transaksi penjualan baju dan celana dengan mudah.</p>
-</div>
+<body class="gradient-bg min-h-screen pb-12">
 
-<div id="toast" class="toast"></div>
+    <div class="container mx-auto px-4 pt-8 max-w-6xl">
+        <!-- Header -->
+        <div class="text-center text-white mb-10 animate-fade-in">
+            <h1 class="text-4xl md:text-5xl font-bold tracking-tight mb-2">Lydiana <span class="text-purple-300">Thrifting</span></h1>
+            <p class="text-purple-100 opacity-90">Sistem Manajemen Penjualan Eksklusif</p>
+        </div>
 
-<div class="stats">
-<div class="card"><i class="fa-solid fa-wallet"></i><h3>Total Pendapatan</h3><h2 id="revenue">Rp0</h2></div>
-<div class="card"><i class="fa-solid fa-cart-shopping"></i><h3>Jumlah Transaksi</h3><h2 id="transactions">0</h2></div>
-<div class="card"><i class="fa-solid fa-chart-line"></i><h3>Rata-rata Transaksi</h3><h2 id="average">Rp0</h2></div>
-</div>
+        <!-- Toast Notification -->
+        <div id="toast" class="fixed top-5 right-5 z-50 transform translate-x-full transition-transform duration-300 pointer-events-none">
+            <div class="bg-white border-l-4 border-green-500 shadow-2xl rounded-lg p-4 flex items-center space-x-3">
+                <i class="fas fa-check-circle text-green-500 text-xl"></i>
+                <p id="toast-msg" class="text-gray-800 font-medium"></p>
+            </div>
+        </div>
 
-<div class="form-box">
-<h2>Tambah Transaksi</h2><br>
-<div class="form-grid">
-<input id="customer" placeholder="Nama Pelanggan">
-<input id="product" placeholder="Nama Produk">
-<select id="category">
-<option value="">Pilih Kategori</option>
-<option>Baju</option><option>Celana</option>
-</select>
-<input id="qty" type="number" placeholder="Jumlah">
-<input id="price" type="number" placeholder="Harga Satuan">
-</div>
-<div class="actions">
-<button class="btn" onclick="addTransaction()">+ Tambah Transaksi</button>
-<button class="btn btn-danger" onclick="resetData()">Reset Data</button>
-</div>
-</div>
+        <!-- Stats Section -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 animate-fade-in" style="animation-delay: 0.1s">
+            <div class="glass-card p-6 rounded-3xl shadow-xl flex items-center space-x-5 hover:scale-105 transition-transform duration-300">
+                <div class="bg-blue-100 p-4 rounded-2xl text-blue-600">
+                    <i class="fa-solid fa-wallet text-2xl"></i>
+                </div>
+                <div>
+                    <p class="text-gray-500 text-sm font-medium">Total Pendapatan</p>
+                    <h2 id="revenue" class="text-2xl font-bold text-gray-800">Rp0</h2>
+                </div>
+            </div>
+            <div class="glass-card p-6 rounded-3xl shadow-xl flex items-center space-x-5 hover:scale-105 transition-transform duration-300">
+                <div class="bg-purple-100 p-4 rounded-2xl text-purple-600">
+                    <i class="fa-solid fa-cart-shopping text-2xl"></i>
+                </div>
+                <div>
+                    <p class="text-gray-500 text-sm font-medium">Transaksi</p>
+                    <h2 id="transactions-count" class="text-2xl font-bold text-gray-800">0</h2>
+                </div>
+            </div>
+            <div class="glass-card p-6 rounded-3xl shadow-xl flex items-center space-x-5 hover:scale-105 transition-transform duration-300">
+                <div class="bg-indigo-100 p-4 rounded-2xl text-indigo-600">
+                    <i class="fa-solid fa-chart-line text-2xl"></i>
+                </div>
+                <div>
+                    <p class="text-gray-500 text-sm font-medium">Rata-rata</p>
+                    <h2 id="average" class="text-2xl font-bold text-gray-800">Rp0</h2>
+                </div>
+            </div>
+        </div>
 
-<br>
+        <!-- Input Form Section -->
+        <div class="glass-card p-8 rounded-3xl shadow-2xl mb-8 animate-fade-in" style="animation-delay: 0.2s">
+            <div class="flex items-center mb-6 space-x-2">
+                <div class="h-8 w-2 bg-purple-600 rounded-full"></div>
+                <h2 class="text-xl font-bold text-gray-800">Tambah Transaksi Baru</h2>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+                <div class="space-y-1">
+                    <label class="text-xs font-semibold text-gray-500 ml-1">Nama Pelanggan</label>
+                    <input id="customer" type="text" placeholder="Contoh: Budi" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-purple-400 focus:border-transparent outline-none transition-all">
+                </div>
+                <div class="space-y-1">
+                    <label class="text-xs font-semibold text-gray-500 ml-1">Nama Produk</label>
+                    <input id="product" type="text" placeholder="Contoh: Hoodie Vintage" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-purple-400 focus:border-transparent outline-none transition-all">
+                </div>
+                <div class="space-y-1">
+                    <label class="text-xs font-semibold text-gray-500 ml-1">Kategori</label>
+                    <select id="category" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-purple-400 focus:border-transparent outline-none transition-all bg-white">
+                        <option value="">Pilih Kategori</option>
+                        <option>Baju</option>
+                        <option>Celana</option>
+                    </select>
+                </div>
+                <div class="space-y-1">
+                    <label class="text-xs font-semibold text-gray-500 ml-1">Jumlah</label>
+                    <input id="qty" type="number" placeholder="0" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-purple-400 focus:border-transparent outline-none transition-all">
+                </div>
+                <div class="space-y-1">
+                    <label class="text-xs font-semibold text-gray-500 ml-1">Harga Satuan</label>
+                    <input id="price" type="number" placeholder="Rp" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-purple-400 focus:border-transparent outline-none transition-all">
+                </div>
+            </div>
 
-<div class="table-box">
-<input class="search" id="search" placeholder="Cari pelanggan atau produk..." onkeyup="render()">
-<table>
-<thead>
-<tr>
-<th>Tanggal</th><th>Pelanggan</th><th>Produk</th><th>Kategori</th><th>Qty</th><th>Harga</th><th>Total</th><th>Aksi</th>
-</tr>
-</thead>
-<tbody id="tableBody"></tbody>
-</table>
-</div>
-</div>
+            <div class="mt-6 flex flex-wrap gap-3">
+                <button onclick="addTransaction()" class="btn-primary px-8 py-3 rounded-xl text-white font-semibold flex items-center shadow-lg">
+                    <i class="fas fa-plus mr-2"></i> Tambah Transaksi
+                </button>
+                <button onclick="resetData()" class="bg-gray-100 hover:bg-red-50 text-gray-600 hover:text-red-600 px-8 py-3 rounded-xl font-semibold transition-all flex items-center">
+                    <i class="fas fa-trash-alt mr-2"></i> Reset
+                </button>
+            </div>
+        </div>
 
-<script>
-const rupiah=n=>new Intl.NumberFormat('id-ID',{style:'currency',currency:'IDR'}).format(n);
+        <!-- Table Section -->
+        <div class="glass-card rounded-3xl shadow-2xl overflow-hidden animate-fade-in" style="animation-delay: 0.3s">
+            <div class="p-6 border-b border-gray-100 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <h2 class="text-xl font-bold text-gray-800 italic uppercase tracking-wider">Riwayat Transaksi</h2>
+                <div class="relative">
+                    <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                    <input id="search" onkeyup="render()" type="text" placeholder="Cari pelanggan/produk..." class="pl-11 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-full text-sm focus:ring-2 focus:ring-purple-400 outline-none w-full md:w-64 transition-all">
+                </div>
+            </div>
+            
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-gray-50/50 text-gray-600 text-sm uppercase tracking-wider">
+                            <th class="px-6 py-4 font-semibold">Tanggal</th>
+                            <th class="px-6 py-4 font-semibold">Pelanggan</th>
+                            <th class="px-6 py-4 font-semibold">Produk</th>
+                            <th class="px-6 py-4 font-semibold text-center">Kategori</th>
+                            <th class="px-6 py-4 font-semibold text-center">Qty</th>
+                            <th class="px-6 py-4 font-semibold">Harga</th>
+                            <th class="px-6 py-4 font-semibold">Total</th>
+                            <th class="px-6 py-4 font-semibold text-center">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody" class="divide-y divide-gray-100 text-gray-700">
+                        <!-- Data rows will be injected here -->
+                    </tbody>
+                </table>
+            </div>
+            <div id="emptyState" class="hidden p-12 text-center">
+                <div class="text-gray-300 mb-4"><i class="fas fa-box-open text-6xl"></i></div>
+                <p class="text-gray-500 font-medium">Belum ada transaksi terekam.</p>
+            </div>
+        </div>
+    </div>
 
-function toast(msg){
-const t=document.getElementById('toast');
-t.innerText=msg;t.style.display='block';
-setTimeout(()=>t.style.display='none',3000);
-}
+    <script>
+        // Inisialisasi Data
+        let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
 
-function save(){
-localStorage.setItem('transactions',JSON.stringify(transactions));
-}
+        const rupiah = (n) => new Intl.NumberFormat('id-ID', {
+            style: 'currency',
+            currency: 'IDR',
+            minimumFractionDigits: 0
+        }).format(n);
 
-function render(){
-let body=document.getElementById('tableBody');
-let q=document.getElementById('search').value.toLowerCase();
-body.innerHTML='';
-let revenue=0;
-let filtered=transactions.filter(x=>
-x.customer.toLowerCase().includes(q)||x.product.toLowerCase().includes(q)
-);
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toast-msg');
+            toastMsg.innerText = msg;
+            toast.classList.remove('translate-x-full');
+            setTimeout(() => {
+                toast.classList.add('translate-x-full');
+            }, 3000);
+        }
 
-if(filtered.length===0){
-body.innerHTML='<tr><td colspan="9" class="empty">📦 Belum ada transaksi</td></tr>';
-}
+        function save() {
+            localStorage.setItem('transactions', JSON.stringify(transactions));
+        }
 
-filtered.forEach((t,i)=>{
-let total=t.qty*t.price;
-revenue+=total;
-body.innerHTML+=`<tr>
-<td>${t.date}</td>
-<td>${t.customer}</td>
-<td>${t.product}</td>
-<td>${t.category}</td>
-<td>${t.qty}</td>
-<td>${rupiah(t.price)}</td>
-<td>${rupiah(total)}</td>
-<td><button class="btn btn-danger" onclick="deleteTransaction(${transactions.indexOf(t)})">Hapus</button></td>
-</tr>`;
-});
+        function render() {
+            const body = document.getElementById('tableBody');
+            const emptyState = document.getElementById('emptyState');
+            const q = document.getElementById('search').value.toLowerCase();
+            
+            body.innerHTML = '';
+            
+            let filtered = transactions.filter(x =>
+                x.customer.toLowerCase().includes(q) || x.product.toLowerCase().includes(q)
+            );
 
-let totalRevenue=transactions.reduce((a,b)=>a+(b.qty*b.price),0);
-document.getElementById('revenue').innerText=rupiah(totalRevenue);
-document.getElementById('transactions').innerText=transactions.length;
-document.getElementById('average').innerText=rupiah(transactions.length?totalRevenue/transactions.length:0);
-save();
-}
+            if (filtered.length === 0) {
+                emptyState.classList.remove('hidden');
+            } else {
+                emptyState.classList.add('hidden');
+                filtered.forEach((t, index) => {
+                    const realIndex = transactions.indexOf(t);
+                    const total = t.qty * t.price;
+                    const row = document.createElement('tr');
+                    row.className = "hover:bg-purple-50/50 transition-colors duration-200 animate-fade-in";
+                    row.innerHTML = `
+                        <td class="px-6 py-4 text-sm text-gray-500">${t.date}</td>
+                        <td class="px-6 py-4 font-semibold text-gray-800">${t.customer}</td>
+                        <td class="px-6 py-4 font-medium">${t.product}</td>
+                        <td class="px-6 py-4 text-center">
+                            <span class="px-3 py-1 rounded-full text-xs font-bold ${t.category === 'Baju' ? 'bg-blue-100 text-blue-600' : 'bg-orange-100 text-orange-600'}">
+                                ${t.category}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 text-center font-bold text-gray-600">${t.qty}</td>
+                        <td class="px-6 py-4">${rupiah(t.price)}</td>
+                        <td class="px-6 py-4 font-bold text-purple-700">${rupiah(total)}</td>
+                        <td class="px-6 py-4 text-center">
+                            <button onclick="deleteTransaction(${realIndex})" class="text-red-400 hover:text-red-600 transition-colors p-2">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </td>
+                    `;
+                    body.appendChild(row);
+                });
+            }
 
-function addTransaction(){
-let customer=customerEl.value.trim();
-let product=productEl.value.trim();
-let category=categoryEl.value;
-let qty=qtyEl.value;
-let price=priceEl.value;
+            // Update Stats
+            const totalRevenue = transactions.reduce((a, b) => a + (b.qty * b.price), 0);
+            document.getElementById('revenue').innerText = rupiah(totalRevenue);
+            document.getElementById('transactions-count').innerText = transactions.length;
+            document.getElementById('average').innerText = rupiah(transactions.length ? totalRevenue / transactions.length : 0);
+            save();
+        }
 
-if(!customer||!product||!category||!qty||!price){
-alert('Semua field wajib diisi');
-return;
-}
+        function addTransaction() {
+            const customerEl = document.getElementById('customer');
+            const productEl = document.getElementById('product');
+            const categoryEl = document.getElementById('category');
+            const qtyEl = document.getElementById('qty');
+            const priceEl = document.getElementById('price');
 
-transactions.push({
-date:new Date().toLocaleDateString('id-ID'),
-customer,product,category,
-qty:Number(qty),price:Number(price)
-});
+            if (!customerEl.value || !productEl.value || !categoryEl.value || !qtyEl.value || !priceEl.value) {
+                alert('Harap lengkapi semua data transaksi!');
+                return;
+            }
 
-customerEl.value='';productEl.value='';categoryEl.value='';
-qtyEl.value='';priceEl.value='';
-render();toast('Transaksi berhasil ditambahkan');
-}
+            transactions.unshift({
+                date: new Date().toLocaleDateString('id-ID', { day:'2-digit', month:'short', year:'numeric' }),
+                customer: customerEl.value,
+                product: productEl.value,
+                category: categoryEl.value,
+                qty: Number(qtyEl.value),
+                price: Number(priceEl.value)
+            });
 
-function deleteTransaction(i){
-if(confirm('Apakah Anda yakin ingin menghapus transaksi ini?')){
-transactions.splice(i,1);
-render();toast('Data berhasil dihapus');
-}
-}
+            // Reset Form
+            customerEl.value = ''; productEl.value = ''; categoryEl.value = '';
+            qtyEl.value = ''; priceEl.value = '';
 
-function resetData(){
-if(confirm('Hapus semua transaksi?')){
-transactions=[];render();toast('Semua data berhasil dihapus');
-}
-}
+            render();
+            showToast('Transaksi berhasil dicatat!');
+        }
 
-const customerEl=document.getElementById('customer');
-const productEl=document.getElementById('product');
-const categoryEl=document.getElementById('category');
-const qtyEl=document.getElementById('qty');
-const priceEl=document.getElementById('price');
+        function deleteTransaction(index) {
+            if (confirm('Hapus transaksi ini?')) {
+                transactions.splice(index, 1);
+                render();
+                showToast('Transaksi telah dihapus');
+            }
+        }
 
-render();
-</script>
+        function resetData() {
+            if (confirm('Hapus semua data permanen?')) {
+                transactions = [];
+                render();
+                showToast('Seluruh data berhasil direset');
+            }
+        }
+
+        // Jalankan render pertama kali
+        render();
+    </script>
 </body>
 </html>
