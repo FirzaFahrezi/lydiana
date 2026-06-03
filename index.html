@@ -3,198 +3,155 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lydiana Thrifting | Professional System</title>
+    <title>Lydiana Thrifting | Minimalist System</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     
     <style>
         body { 
             font-family: 'Plus Jakarta Sans', sans-serif; 
-            background: #f8fafc;
-        }
-        .card-system {
-            background: white;
-            border: 1px solid #eef2f6;
-            border-radius: 24px;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.04);
+            background-color: #fcfcfd;
+            color: #1a1a1a;
         }
         /* Menghilangkan tombol panah pada input angka */
         input::-webkit-outer-spin-button,
         input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
         input[type=number] { -moz-appearance: textfield; }
         
-        /* Gaya Input Modern */
-        .input-group {
-            @apply relative flex items-center;
+        .input-minimal {
+            @apply w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg text-sm transition-all outline-none;
         }
-        .input-group i {
-            @apply absolute left-4 text-slate-400 text-sm transition-colors;
+        .input-minimal:focus {
+            @apply border-indigo-600 ring-2 ring-indigo-50;
         }
-        .input-control {
-            @apply w-full pl-11 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-sm transition-all outline-none font-medium;
-        }
-        .input-control:focus {
-            @apply bg-white border-indigo-500 ring-4 ring-indigo-500/10;
-        }
-        .input-control:focus + i {
-            @apply text-indigo-500;
-        }
-
-        .custom-scroll::-webkit-scrollbar { height: 6px; }
-        .custom-scroll::-webkit-scrollbar-track { background: #f1f1f1; }
-        .custom-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        .custom-scroll::-webkit-scrollbar { height: 4px; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 10px; }
     </style>
 </head>
-<body class="p-4 md:p-10 text-slate-800 min-h-screen">
+<body class="antialiased">
 
-    <div class="max-w-6xl mx-auto space-y-10">
+    <div class="max-w-5xl mx-auto px-4 py-8 md:py-12">
         
         <!-- HEADER -->
-        <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+        <header class="flex flex-col md:flex-row justify-between items-center mb-12 gap-4 border-b border-gray-100 pb-8">
             <div class="text-center md:text-left">
-                <h1 class="text-4xl font-extrabold text-slate-900 tracking-tighter italic">LYDIANA <span class="text-indigo-600 not-italic">THRIFTING.</span></h1>
-                <p class="text-slate-400 font-medium text-sm mt-1">Sistem Manajemen Penjualan & Analisis Pendapatan</p>
+                <h1 class="text-2xl font-bold tracking-tight text-gray-900">Lydiana <span class="text-indigo-600">Thrifting</span></h1>
+                <p class="text-gray-400 text-sm mt-1">Sistem Manajemen Penjualan</p>
             </div>
-            <div class="bg-white px-6 py-3 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-3">
-                <div class="p-2 bg-indigo-50 rounded-lg text-indigo-600"><i class="fa-solid fa-calendar-day"></i></div>
-                <span id="current-date" class="text-xs font-bold text-slate-600 uppercase tracking-widest text-center"></span>
+            <div class="text-xs font-semibold text-gray-500 bg-gray-50 px-4 py-2 rounded-full border border-gray-100">
+                <span id="current-date"></span>
+            </div>
+        </header>
+
+        <!-- STATS (MINIMAL) -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-12">
+            <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+                <p class="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-2">Pendapatan</p>
+                <h3 id="revenue" class="text-xl font-bold text-gray-900">Rp0</h3>
+            </div>
+            <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+                <p class="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-2">Unit Terjual</p>
+                <h3 id="total-qty" class="text-xl font-bold text-gray-900">0 <span class="text-xs font-medium text-gray-400">Pcs</span></h3>
+            </div>
+            <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+                <p class="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-2">Rata-rata</p>
+                <h3 id="average-value" class="text-xl font-bold text-indigo-600">Rp0</h3>
             </div>
         </div>
 
-        <!-- STATS OVERVIEW -->
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
-            <div class="card-system p-8 bg-indigo-600 text-white relative overflow-hidden">
-                <p class="text-xs font-bold text-indigo-200 uppercase tracking-[0.2em] mb-2">Total Pendapatan</p>
-                <h3 id="revenue" class="text-3xl font-black tracking-tight relative z-10">Rp0</h3>
-                <i class="fa-solid fa-wallet absolute -right-4 -bottom-4 text-8xl opacity-10"></i>
-            </div>
-            <div class="card-system p-8">
-                <p class="text-xs font-bold text-slate-400 uppercase tracking-[0.2em] mb-2">Barang Terjual</p>
-                <h3 id="total-qty" class="text-3xl font-black text-slate-800 tracking-tight">0 <span class="text-sm text-slate-300 font-bold tracking-normal uppercase">Pcs</span></h3>
-            </div>
-            <div class="card-system p-8">
-                <p class="text-xs font-bold text-slate-400 uppercase tracking-[0.2em] mb-2">Rata-Rata Transaksi</p>
-                <h3 id="average-value" class="text-3xl font-black text-slate-800 tracking-tight">Rp0</h3>
-            </div>
-        </div>
-
-        <!-- FORM ENTRY TRANSAKSI (THE NEW DESIGN) -->
-        <div class="card-system overflow-hidden">
-            <div class="bg-slate-900 p-6 flex items-center gap-3">
-                <div class="h-10 w-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-indigo-500/20">
-                    <i class="fa-solid fa-cash-register text-lg"></i>
+        <!-- FORM ENTRY (MINIMAL & CLEAR) -->
+        <section class="bg-white rounded-xl border border-gray-100 shadow-sm p-6 md:p-8 mb-12">
+            <h2 class="text-sm font-bold text-gray-900 mb-6 flex items-center gap-2 uppercase tracking-widest">
+                <i class="fa-solid fa-plus text-indigo-600"></i> Entri Transaksi
+            </h2>
+            
+            <div class="space-y-6">
+                <!-- Row 1 -->
+                <div class="w-full md:w-2/3">
+                    <label class="block text-xs font-bold text-gray-500 mb-2">Nama Pelanggan</label>
+                    <input id="customer" type="text" placeholder="Masukkan nama..." class="input-minimal">
                 </div>
-                <div>
-                    <h2 class="font-bold text-white tracking-wide">Entry Transaksi Baru</h2>
-                    <p class="text-slate-400 text-[10px] uppercase font-bold tracking-widest">Lengkapi detail di bawah ini</p>
-                </div>
-            </div>
 
-            <div class="p-8 space-y-8">
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                    <!-- Sisi Kiri: Identitas -->
-                    <div class="lg:col-span-4 space-y-4">
-                        <div class="bg-indigo-50/50 p-6 rounded-3xl border border-indigo-100/50">
-                            <label class="text-[11px] font-black text-indigo-400 uppercase tracking-[0.2em] mb-3 block">Identitas Pelanggan</label>
-                            <div class="input-group">
-                                <input id="customer" type="text" placeholder="Masukkan nama pembeli..." class="input-control border-none shadow-sm shadow-indigo-100">
-                                <i class="fa-solid fa-user"></i>
-                            </div>
-                            <p class="text-[10px] text-indigo-300 mt-3 font-medium italic">* Pastikan nama sesuai untuk mempermudah pencarian.</p>
-                        </div>
+                <!-- Row 2 -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div class="md:col-span-1">
+                        <label class="block text-xs font-bold text-gray-500 mb-2">Produk</label>
+                        <input id="product" type="text" placeholder="Nama item" class="input-minimal">
                     </div>
-
-                    <!-- Sisi Kanan: Detail Barang -->
-                    <div class="lg:col-span-8">
-                        <label class="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4 block ml-1">Informasi Detail Pembelian</label>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                            <div class="input-group">
-                                <input id="product" type="text" placeholder="Nama Produk (ex: Jaket Vintage)" class="input-control">
-                                <i class="fa-solid fa-tag"></i>
-                            </div>
-                            <div class="input-group">
-                                <select id="category" class="input-control cursor-pointer appearance-none">
-                                    <option value="">Pilih Kategori Produk</option>
-                                    <option>Baju</option>
-                                    <option>Celana</option>
-                                </select>
-                                <i class="fa-solid fa-layer-group"></i>
-                            </div>
-                            <div class="input-group">
-                                <input id="qty" type="number" placeholder="Jumlah (Qty)" class="input-control">
-                                <i class="fa-solid fa-cubes"></i>
-                            </div>
-                            <div class="input-group">
-                                <input id="price" type="number" placeholder="Harga Satuan (Rp)" class="input-control font-bold text-indigo-600">
-                                <i class="fa-solid fa-rupiah-sign"></i>
-                            </div>
-                        </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 mb-2">Kategori</label>
+                        <select id="category" class="input-minimal bg-white">
+                            <option value="">Pilih</option>
+                            <option>Baju</option>
+                            <option>Celana</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 mb-2 text-center">Qty</label>
+                        <input id="qty" type="number" placeholder="0" class="input-minimal text-center font-semibold">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 mb-2">Harga (Rp)</label>
+                        <input id="price" type="number" placeholder="0" class="input-minimal font-semibold text-indigo-600">
                     </div>
                 </div>
 
-                <!-- Tombol Simpan -->
-                <div class="pt-6 border-t border-slate-100 flex justify-center md:justify-start">
-                    <button onclick="addTransaction()" class="w-full md:w-auto px-16 py-4 bg-indigo-600 hover:bg-slate-900 text-white font-black rounded-2xl transition-all shadow-xl shadow-indigo-200 flex items-center justify-center gap-4 active:scale-95 group tracking-widest text-xs">
-                        <i class="fa-solid fa-paper-plane group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"></i>
-                        SIMPAN TRANSAKSI KE DATABASE
+                <!-- Simpan Button -->
+                <div class="pt-4">
+                    <button onclick="addTransaction()" class="w-full md:w-auto px-10 py-3 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-lg transition-all shadow-md shadow-indigo-100 flex items-center justify-center gap-2 uppercase tracking-widest">
+                        Simpan Transaksi
                     </button>
                 </div>
             </div>
-        </div>
+        </section>
 
-        <!-- RIWAYAT TRANSAKSI -->
-        <div class="card-system overflow-hidden">
-            <div class="p-8 border-b border-slate-100 flex flex-col md:flex-row justify-between items-center gap-6 bg-slate-50/50">
-                <div class="flex items-center gap-3">
-                    <h2 class="font-extrabold text-slate-800 tracking-tight flex items-center gap-2 uppercase text-sm italic">
-                        <i class="fa-solid fa-list-check text-slate-400 not-italic"></i> Data Penjualan Terakhir
-                    </h2>
-                </div>
-                <div class="relative w-full md:w-80">
-                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 text-xs"></i>
-                    <input id="search" onkeyup="render()" type="text" placeholder="Cari data..." class="w-full pl-11 pr-5 py-3 bg-white border border-slate-200 rounded-full text-xs outline-none focus:ring-4 focus:ring-indigo-500/5 transition-all shadow-sm">
+        <!-- TABLE RIWAYAT -->
+        <section class="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
+            <div class="p-6 border-b border-gray-50 flex flex-col md:flex-row justify-between items-center gap-4">
+                <h2 class="text-sm font-bold text-gray-900 uppercase tracking-widest">Riwayat Penjualan</h2>
+                <div class="relative w-full md:w-64">
+                    <i class="fa-solid fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-300 text-[10px]"></i>
+                    <input id="search" onkeyup="render()" type="text" placeholder="Cari data..." class="w-full pl-9 pr-4 py-2 bg-gray-50 border border-transparent rounded-lg text-xs focus:bg-white focus:border-gray-200 outline-none transition-all">
                 </div>
             </div>
 
             <div class="overflow-x-auto custom-scroll">
-                <table class="w-full text-left whitespace-nowrap">
+                <table class="w-full text-left border-collapse">
                     <thead>
-                        <tr class="text-[10px] uppercase tracking-[0.2em] text-slate-400 font-extrabold bg-white border-b border-slate-100">
-                            <th class="px-8 py-5 text-center">Waktu</th>
-                            <th class="px-8 py-5">Pelanggan</th>
-                            <th class="px-8 py-5">Produk</th>
-                            <th class="px-8 py-5 text-center">Kategori</th>
-                            <th class="px-8 py-5 text-center">Qty</th>
-                            <th class="px-8 py-5 text-right">Hrg Satuan</th>
-                            <th class="px-8 py-5 text-right">Total Akhir</th>
-                            <th class="px-8 py-5 text-center">Aksi</th>
+                        <tr class="bg-gray-50/50 text-[10px] uppercase font-bold text-gray-400 border-b border-gray-100">
+                            <th class="px-6 py-4 text-center">Waktu</th>
+                            <th class="px-6 py-4">Pelanggan</th>
+                            <th class="px-6 py-4">Item</th>
+                            <th class="px-6 py-4 text-center">Kategori</th>
+                            <th class="px-6 py-4 text-center">Qty</th>
+                            <th class="px-6 py-4 text-right">Harga</th>
+                            <th class="px-6 py-4 text-right">Total</th>
+                            <th class="px-6 py-4 text-center">Aksi</th>
                         </tr>
                     </thead>
-                    <tbody id="tableBody" class="text-sm divide-y divide-slate-100">
-                        <!-- Content via JS -->
+                    <tbody id="tableBody" class="text-xs divide-y divide-gray-50">
+                        <!-- Content -->
                     </tbody>
                 </table>
             </div>
 
-            <div id="emptyState" class="hidden py-32 text-center bg-white">
-                <i class="fa-solid fa-inbox text-slate-100 text-8xl mb-4"></i>
-                <p class="text-slate-400 font-bold tracking-widest uppercase text-[10px]">Database Transaksi Kosong</p>
+            <div id="emptyState" class="hidden py-20 text-center">
+                <p class="text-gray-300 text-sm font-medium">Belum ada data tersedia.</p>
             </div>
 
-            <div class="p-6 bg-slate-50 flex justify-center md:justify-end">
-                <button onclick="resetData()" class="text-[10px] text-slate-300 hover:text-red-500 font-extrabold transition-all uppercase tracking-[0.2em] flex items-center gap-2">
-                    <i class="fa-solid fa-trash-can"></i> Bersihkan Semua Data
+            <div class="p-4 bg-white flex justify-center md:justify-end border-t border-gray-50">
+                <button onclick="resetData()" class="text-[10px] text-gray-300 hover:text-red-400 font-bold uppercase tracking-[0.2em] transition-colors">
+                    Hapus Semua Data
                 </button>
             </div>
-        </div>
+        </section>
     </div>
 
-    <!-- NOTIF TOAST -->
-    <div id="toast" class="fixed top-10 left-1/2 -translate-x-1/2 z-50 transform -translate-y-20 opacity-0 transition-all duration-500">
-        <div class="bg-slate-900 text-white px-8 py-4 rounded-full shadow-2xl flex items-center gap-4 border border-slate-700">
-            <i class="fa-solid fa-circle-check text-emerald-400"></i>
-            <span id="toast-msg" class="text-xs font-black tracking-widest uppercase"></span>
+    <!-- NOTIFIKASI -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300">
+        <div class="bg-gray-900 text-white px-6 py-3 rounded-lg shadow-xl text-xs font-bold uppercase tracking-widest">
+            <span id="toast-msg"></span>
         </div>
     </div>
 
@@ -208,8 +165,8 @@
         function showToast(msg) {
             const toast = document.getElementById('toast');
             document.getElementById('toast-msg').innerText = msg;
-            toast.classList.remove('-translate-y-20', 'opacity-0');
-            setTimeout(() => toast.classList.add('-translate-y-20', 'opacity-0'), 3000);
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => toast.classList.add('translate-y-20', 'opacity-0'), 2500);
         }
 
         function render() {
@@ -230,22 +187,22 @@
                     const realIndex = transactions.indexOf(t);
                     const total = t.qty * t.price;
                     const row = document.createElement('tr');
-                    row.className = "hover:bg-indigo-50/20 transition-all duration-200";
+                    row.className = "hover:bg-gray-50 transition-colors";
                     row.innerHTML = `
-                        <td class="px-8 py-6 text-[10px] font-bold text-slate-400 text-center uppercase tracking-wider">${t.date}</td>
-                        <td class="px-8 py-6"><span class="font-extrabold text-slate-800">${t.customer}</span></td>
-                        <td class="px-8 py-6 text-slate-600 font-medium">${t.product}</td>
-                        <td class="px-8 py-6 text-center">
-                            <span class="px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest ${t.category === 'Baju' ? 'bg-indigo-50 text-indigo-600 border border-indigo-100' : 'bg-amber-50 text-amber-600 border border-amber-100'}">
+                        <td class="px-6 py-5 text-[10px] text-gray-400 text-center font-medium">${t.date}</td>
+                        <td class="px-6 py-5 font-bold text-gray-800">${t.customer}</td>
+                        <td class="px-6 py-5 text-gray-500">${t.product}</td>
+                        <td class="px-6 py-5 text-center">
+                            <span class="px-2 py-0.5 rounded text-[9px] font-bold uppercase ${t.category === 'Baju' ? 'bg-indigo-50 text-indigo-600' : 'bg-orange-50 text-orange-600'}">
                                 ${t.category}
                             </span>
                         </td>
-                        <td class="px-8 py-6 text-center font-bold text-slate-700 underline decoration-slate-200 underline-offset-4">x${t.qty}</td>
-                        <td class="px-8 py-6 text-right text-slate-400 font-semibold text-xs">${rupiah(t.price)}</td>
-                        <td class="px-8 py-6 text-right font-black text-indigo-600 text-base italic">${rupiah(total)}</td>
-                        <td class="px-8 py-6 text-center">
-                            <button onclick="deleteTransaction(${realIndex})" class="w-9 h-9 rounded-xl text-slate-200 hover:bg-red-50 hover:text-red-500 transition-all flex items-center justify-center mx-auto">
-                                <i class="fas fa-trash-can text-sm"></i>
+                        <td class="px-6 py-5 text-center font-bold text-gray-600">x${t.qty}</td>
+                        <td class="px-6 py-5 text-right text-gray-400 font-medium">${rupiah(t.price)}</td>
+                        <td class="px-6 py-5 text-right font-bold text-gray-900">${rupiah(total)}</td>
+                        <td class="px-6 py-5 text-center">
+                            <button onclick="deleteTransaction(${realIndex})" class="text-gray-200 hover:text-red-500 transition-colors">
+                                <i class="fas fa-trash-alt"></i>
                             </button>
                         </td>
                     `;
@@ -258,7 +215,7 @@
             const averageValue = transactions.length ? Math.round(totalRevenue / transactions.length) : 0;
 
             document.getElementById('revenue').innerText = rupiah(totalRevenue);
-            document.getElementById('total-qty').innerHTML = `${totalQty} <span class="text-sm text-slate-300 font-bold">Pcs</span>`;
+            document.getElementById('total-qty').innerHTML = `${totalQty} <span class="text-[10px] text-gray-300 font-bold uppercase">Pcs</span>`;
             document.getElementById('average-value').innerText = rupiah(averageValue);
             
             localStorage.setItem('transactions', JSON.stringify(transactions));
@@ -274,7 +231,7 @@
             };
 
             if (!inputs.customer.value || !inputs.product.value || !inputs.category.value || !inputs.qty.value || !inputs.price.value) {
-                showToast('❌ Gagal: Mohon lengkapi semua data');
+                alert('Mohon isi semua data.');
                 return;
             }
 
@@ -293,22 +250,22 @@
             Object.values(inputs).forEach(el => el.value = '');
             
             render();
-            showToast('✅ Berhasil: Transaksi telah dicatat');
+            showToast('DATA DISIMPAN');
         }
 
         function deleteTransaction(index) {
-            if (confirm('Konfirmasi: Ingin menghapus catatan ini?')) {
+            if (confirm('Hapus transaksi ini?')) {
                 transactions.splice(index, 1);
                 render();
-                showToast('🗑️ Data telah dihapus');
+                showToast('DATA DIHAPUS');
             }
         }
 
         function resetData() {
-            if (confirm('BAHAYA: Seluruh database akan dibersihkan. Lanjutkan?')) {
+            if (confirm('Reset database?')) {
                 transactions = [];
                 render();
-                showToast('♻️ Database telah direset');
+                showToast('DATABASE BERSIH');
             }
         }
 
