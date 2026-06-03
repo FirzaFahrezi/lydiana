@@ -224,27 +224,6 @@ th,td{
 
 <script>
 
-let transactions = JSON.parse(localStorage.getItem('transactions')) || [
-{
-date:new Date().toLocaleDateString(),
-customer:'Andi',
-product:'Jaket Hoodie',
-category:'Jaket',
-size:'L',
-qty:2,
-price:250000
-},
-{
-date:new Date().toLocaleDateString(),
-customer:'Rina',
-product:'Sepatu Casual',
-category:'Sepatu',
-size:'39',
-qty:1,
-price:450000
-}
-];
-
 function rupiah(number){
 return new Intl.NumberFormat('id-ID',{
 style:'currency',
@@ -284,7 +263,6 @@ tbody.innerHTML+=`
 <td>${item.customer}</td>
 <td>${item.product}</td>
 <td>${item.category}</td>
-<td>${item.size}</td>
 <td>${item.qty}</td>
 <td>${rupiah(item.price)}</td>
 <td>${rupiah(total)}</td>
@@ -316,7 +294,6 @@ function addTransaction(){
 let customer=document.getElementById('customer').value;
 let product=document.getElementById('product').value;
 let category=document.getElementById('category').value;
-let size=document.getElementById('size').value;
 let qty=document.getElementById('qty').value;
 let price=document.getElementById('price').value;
 
@@ -330,7 +307,6 @@ date:new Date().toLocaleDateString(),
 customer,
 product,
 category,
-size,
 qty:Number(qty),
 price:Number(price)
 });
@@ -340,7 +316,6 @@ render();
 document.getElementById('customer').value='';
 document.getElementById('product').value='';
 document.getElementById('category').value='';
-document.getElementById('size').value='';
 document.getElementById('qty').value='';
 document.getElementById('price').value='';
 
