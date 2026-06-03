@@ -3,172 +3,189 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lydiana Thrifting | Dashboard</title>
-    <!-- Tailwind CSS CDN -->
+    <title>Lydiana Thrifting | Management System</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts: Poppins -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Font Awesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     
     <style>
-        body { font-family: 'Poppins', sans-serif; }
-        .glass-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background-color: #f8fafc;
+            color: #1e293b;
         }
-        .gradient-bg {
-            background: linear-gradient(135deg, #1e3a8a 0%, #7c3aed 100%);
-            background-attachment: fixed;
+        .real-shadow {
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
         }
-        .btn-primary {
-            background: linear-gradient(135deg, #3b82f6 0%, #7c3aed 100%);
-            transition: all 0.3s ease;
+        .real-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+            border-radius: 16px;
         }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 15px -3px rgba(124, 58, 237, 0.4);
+        .btn-real {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
-        .animate-fade-in {
-            animation: fadeIn 0.5s ease-out forwards;
+        .btn-real:active {
+            transform: scale(0.97);
         }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        .input-real {
+            border: 1.5px solid #e2e8f0;
+            transition: all 0.2s;
         }
+        .input-real:focus {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+            outline: none;
+        }
+        /* Custom Table Scrollbar */
+        .custom-scroll::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scroll::-webkit-scrollbar-track { background: #f1f1f1; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
     </style>
 </head>
-<body class="gradient-bg min-h-screen pb-12">
+<body class="min-h-screen border-t-4 border-indigo-600">
 
-    <div class="container mx-auto px-4 pt-8 max-w-6xl">
-        <!-- Header -->
-        <div class="text-center text-white mb-10 animate-fade-in">
-            <h1 class="text-4xl md:text-5xl font-bold tracking-tight mb-2">Lydiana <span class="text-purple-300">Thrifting</span></h1>
-            <p class="text-purple-100 opacity-90">Sistem Manajemen Penjualan Eksklusif</p>
-        </div>
-
-        <!-- Toast Notification -->
-        <div id="toast" class="fixed top-5 right-5 z-50 transform translate-x-full transition-transform duration-300 pointer-events-none">
-            <div class="bg-white border-l-4 border-green-500 shadow-2xl rounded-lg p-4 flex items-center space-x-3">
-                <i class="fas fa-check-circle text-green-500 text-xl"></i>
-                <p id="toast-msg" class="text-gray-800 font-medium"></p>
+    <div class="container mx-auto px-4 py-8 max-w-7xl">
+        <!-- Top Navigation / Header -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between mb-10 gap-4">
+            <div>
+                <h1 class="text-3xl font-extrabold tracking-tight text-slate-900">Lydiana <span class="text-indigo-600">Thrifting.</span></h1>
+                <p class="text-slate-500 text-sm mt-1">Sistem Pencatatan Transaksi & Stok Real-time</p>
             </div>
-        </div>
-
-        <!-- Stats Section -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 animate-fade-in" style="animation-delay: 0.1s">
-            <div class="glass-card p-6 rounded-3xl shadow-xl flex items-center space-x-5 hover:scale-105 transition-transform duration-300">
-                <div class="bg-blue-100 p-4 rounded-2xl text-blue-600">
-                    <i class="fa-solid fa-wallet text-2xl"></i>
+            <div class="flex items-center gap-3 bg-white p-2 rounded-2xl real-shadow border border-slate-100">
+                <div class="bg-indigo-50 text-indigo-600 p-2.5 rounded-xl">
+                    <i class="fa-regular fa-calendar-check text-lg"></i>
                 </div>
-                <div>
-                    <p class="text-gray-500 text-sm font-medium">Total Pendapatan</p>
-                    <h2 id="revenue" class="text-2xl font-bold text-gray-800">Rp0</h2>
-                </div>
-            </div>
-            <div class="glass-card p-6 rounded-3xl shadow-xl flex items-center space-x-5 hover:scale-105 transition-transform duration-300">
-                <div class="bg-purple-100 p-4 rounded-2xl text-purple-600">
-                    <i class="fa-solid fa-cart-shopping text-2xl"></i>
-                </div>
-                <div>
-                    <p class="text-gray-500 text-sm font-medium">Transaksi</p>
-                    <h2 id="transactions-count" class="text-2xl font-bold text-gray-800">0</h2>
-                </div>
-            </div>
-            <div class="glass-card p-6 rounded-3xl shadow-xl flex items-center space-x-5 hover:scale-105 transition-transform duration-300">
-                <div class="bg-indigo-100 p-4 rounded-2xl text-indigo-600">
-                    <i class="fa-solid fa-chart-line text-2xl"></i>
-                </div>
-                <div>
-                    <p class="text-gray-500 text-sm font-medium">Rata-rata</p>
-                    <h2 id="average" class="text-2xl font-bold text-gray-800">Rp0</h2>
+                <div class="pr-4">
+                    <p class="text-[10px] uppercase font-bold text-slate-400 leading-none">Hari Ini</p>
+                    <p id="current-date" class="text-sm font-bold text-slate-700"></p>
                 </div>
             </div>
         </div>
 
-        <!-- Input Form Section -->
-        <div class="glass-card p-8 rounded-3xl shadow-2xl mb-8 animate-fade-in" style="animation-delay: 0.2s">
-            <div class="flex items-center mb-6 space-x-2">
-                <div class="h-8 w-2 bg-purple-600 rounded-full"></div>
-                <h2 class="text-xl font-bold text-gray-800">Tambah Transaksi Baru</h2>
-            </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-                <div class="space-y-1">
-                    <label class="text-xs font-semibold text-gray-500 ml-1">Nama Pelanggan</label>
-                    <input id="customer" type="text" placeholder="Contoh: Budi" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-purple-400 focus:border-transparent outline-none transition-all">
-                </div>
-                <div class="space-y-1">
-                    <label class="text-xs font-semibold text-gray-500 ml-1">Nama Produk</label>
-                    <input id="product" type="text" placeholder="Contoh: Hoodie Vintage" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-purple-400 focus:border-transparent outline-none transition-all">
-                </div>
-                <div class="space-y-1">
-                    <label class="text-xs font-semibold text-gray-500 ml-1">Kategori</label>
-                    <select id="category" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-purple-400 focus:border-transparent outline-none transition-all bg-white">
-                        <option value="">Pilih Kategori</option>
-                        <option>Baju</option>
-                        <option>Celana</option>
-                    </select>
-                </div>
-                <div class="space-y-1">
-                    <label class="text-xs font-semibold text-gray-500 ml-1">Jumlah</label>
-                    <input id="qty" type="number" placeholder="0" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-purple-400 focus:border-transparent outline-none transition-all">
-                </div>
-                <div class="space-y-1">
-                    <label class="text-xs font-semibold text-gray-500 ml-1">Harga Satuan</label>
-                    <input id="price" type="number" placeholder="Rp" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-purple-400 focus:border-transparent outline-none transition-all">
-                </div>
-            </div>
-
-            <div class="mt-6 flex flex-wrap gap-3">
-                <button onclick="addTransaction()" class="btn-primary px-8 py-3 rounded-xl text-white font-semibold flex items-center shadow-lg">
-                    <i class="fas fa-plus mr-2"></i> Tambah Transaksi
-                </button>
-                <button onclick="resetData()" class="bg-gray-100 hover:bg-red-50 text-gray-600 hover:text-red-600 px-8 py-3 rounded-xl font-semibold transition-all flex items-center">
-                    <i class="fas fa-trash-alt mr-2"></i> Reset
-                </button>
+        <!-- Notification Toast -->
+        <div id="toast" class="fixed top-6 right-6 z-50 pointer-events-none opacity-0 transition-all duration-300 transform translate-y-[-20px]">
+            <div class="bg-slate-900 text-white px-6 py-3 rounded-2xl shadow-2xl flex items-center gap-3">
+                <div class="bg-green-500 h-2 w-2 rounded-full animate-pulse"></div>
+                <span id="toast-msg" class="text-sm font-medium"></span>
             </div>
         </div>
 
-        <!-- Table Section -->
-        <div class="glass-card rounded-3xl shadow-2xl overflow-hidden animate-fade-in" style="animation-delay: 0.3s">
-            <div class="p-6 border-b border-gray-100 flex flex-col md:flex-row md:items-center justify-between gap-4">
-                <h2 class="text-xl font-bold text-gray-800 italic uppercase tracking-wider">Riwayat Transaksi</h2>
-                <div class="relative">
-                    <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
-                    <input id="search" onkeyup="render()" type="text" placeholder="Cari pelanggan/produk..." class="pl-11 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-full text-sm focus:ring-2 focus:ring-purple-400 outline-none w-full md:w-64 transition-all">
+        <!-- Stats Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+            <div class="real-card p-6 border-l-4 border-l-indigo-500 relative overflow-hidden">
+                <div class="relative z-10">
+                    <p class="text-sm font-semibold text-slate-500 mb-1">Total Pendapatan</p>
+                    <h2 id="revenue" class="text-3xl font-black text-slate-800 tracking-tight">Rp0</h2>
+                </div>
+                <i class="fa-solid fa-wallet text-slate-50 absolute -right-4 -bottom-4 text-8xl"></i>
+            </div>
+            <div class="real-card p-6 border-l-4 border-l-emerald-500 relative overflow-hidden">
+                <div class="relative z-10">
+                    <p class="text-sm font-semibold text-slate-500 mb-1">Volume Penjualan</p>
+                    <h2 id="transactions-count" class="text-3xl font-black text-slate-800 tracking-tight">0 <span class="text-sm font-medium text-slate-400">Order</span></h2>
+                </div>
+                <i class="fa-solid fa-cart-shopping text-slate-50 absolute -right-4 -bottom-4 text-8xl"></i>
+            </div>
+            <div class="real-card p-6 border-l-4 border-l-amber-500 relative overflow-hidden">
+                <div class="relative z-10">
+                    <p class="text-sm font-semibold text-slate-500 mb-1">Nilai Rata-rata</p>
+                    <h2 id="average" class="text-3xl font-black text-slate-800 tracking-tight">Rp0</h2>
+                </div>
+                <i class="fa-solid fa-chart-pie text-slate-50 absolute -right-4 -bottom-4 text-8xl"></i>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <!-- Form Input (Sticky-like) -->
+            <div class="lg:col-span-4">
+                <div class="real-card p-6 sticky top-8">
+                    <h3 class="text-lg font-bold text-slate-800 mb-6 flex items-center gap-2">
+                        <i class="fa-solid fa-circle-plus text-indigo-600"></i> Input Transaksi
+                    </h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="text-xs font-bold text-slate-500 uppercase ml-1">Pelanggan</label>
+                            <input id="customer" type="text" placeholder="Nama pembeli..." class="input-real w-full px-4 py-3 rounded-xl text-sm mt-1">
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-slate-500 uppercase ml-1">Produk</label>
+                            <input id="product" type="text" placeholder="Nama baju/celana..." class="input-real w-full px-4 py-3 rounded-xl text-sm mt-1">
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="text-xs font-bold text-slate-500 uppercase ml-1">Kategori</label>
+                                <select id="category" class="input-real w-full px-4 py-3 rounded-xl text-sm mt-1 bg-white">
+                                    <option value="">Pilih</option>
+                                    <option>Baju</option>
+                                    <option>Celana</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="text-xs font-bold text-slate-500 uppercase ml-1">Qty</label>
+                                <input id="qty" type="number" placeholder="0" class="input-real w-full px-4 py-3 rounded-xl text-sm mt-1">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-slate-500 uppercase ml-1">Harga Satuan (Rp)</label>
+                            <input id="price" type="number" placeholder="50000" class="input-real w-full px-4 py-3 rounded-xl text-sm mt-1 font-mono font-bold text-indigo-600">
+                        </div>
+                        
+                        <div class="pt-4 space-y-3">
+                            <button onclick="addTransaction()" class="btn-real w-full bg-slate-900 hover:bg-indigo-700 text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-check-double"></i> Simpan Transaksi
+                            </button>
+                            <button onclick="resetData()" class="w-full text-slate-400 hover:text-red-500 text-xs font-bold py-2 transition-colors">
+                                <i class="fa-solid fa-rotate-left mr-1"></i> Reset Semua Data
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
-            
-            <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse">
-                    <thead>
-                        <tr class="bg-gray-50/50 text-gray-600 text-sm uppercase tracking-wider">
-                            <th class="px-6 py-4 font-semibold">Tanggal</th>
-                            <th class="px-6 py-4 font-semibold">Pelanggan</th>
-                            <th class="px-6 py-4 font-semibold">Produk</th>
-                            <th class="px-6 py-4 font-semibold text-center">Kategori</th>
-                            <th class="px-6 py-4 font-semibold text-center">Qty</th>
-                            <th class="px-6 py-4 font-semibold">Harga</th>
-                            <th class="px-6 py-4 font-semibold">Total</th>
-                            <th class="px-6 py-4 font-semibold text-center">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tableBody" class="divide-y divide-gray-100 text-gray-700">
-                        <!-- Data rows will be injected here -->
-                    </tbody>
-                </table>
-            </div>
-            <div id="emptyState" class="hidden p-12 text-center">
-                <div class="text-gray-300 mb-4"><i class="fas fa-box-open text-6xl"></i></div>
-                <p class="text-gray-500 font-medium">Belum ada transaksi terekam.</p>
+
+            <!-- Table View -->
+            <div class="lg:col-span-8">
+                <div class="real-card overflow-hidden">
+                    <div class="p-6 border-b border-slate-100 flex flex-col md:flex-row justify-between items-center gap-4 bg-slate-50/50">
+                        <h3 class="text-lg font-bold text-slate-800">Riwayat Penjualan</h3>
+                        <div class="relative w-full md:w-72">
+                            <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                            <input id="search" onkeyup="render()" type="text" placeholder="Cari data..." class="w-full pl-10 pr-4 py-2.5 rounded-full border border-slate-200 text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all">
+                        </div>
+                    </div>
+                    
+                    <div class="overflow-x-auto custom-scroll">
+                        <table class="w-full text-left">
+                            <thead>
+                                <tr class="bg-white text-slate-400 text-[11px] uppercase tracking-widest border-b border-slate-100">
+                                    <th class="px-6 py-4 font-bold">Tanggal</th>
+                                    <th class="px-6 py-4 font-bold">Item & Pelanggan</th>
+                                    <th class="px-6 py-4 font-bold text-center">Qty</th>
+                                    <th class="px-6 py-4 font-bold">Total Harga</th>
+                                    <th class="px-6 py-4 font-bold text-center">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tableBody" class="divide-y divide-slate-50">
+                                <!-- Dynamic Rows -->
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div id="emptyState" class="hidden py-20 text-center">
+                        <img src="https://illustrations.popsy.co/slate/empty-box.svg" class="w-32 mx-auto mb-4 opacity-50">
+                        <p class="text-slate-400 font-medium italic">Belum ada catatan transaksi hari ini.</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
-        // Inisialisasi Data
+        // Inisialisasi Tanggal
+        document.getElementById('current-date').innerText = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+
         let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
 
         const rupiah = (n) => new Intl.NumberFormat('id-ID', {
@@ -179,16 +196,13 @@
 
         function showToast(msg) {
             const toast = document.getElementById('toast');
-            const toastMsg = document.getElementById('toast-msg');
-            toastMsg.innerText = msg;
-            toast.classList.remove('translate-x-full');
+            document.getElementById('toast-msg').innerText = msg;
+            toast.style.opacity = '1';
+            toast.style.transform = 'translateY(0)';
             setTimeout(() => {
-                toast.classList.add('translate-x-full');
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(-20px)';
             }, 3000);
-        }
-
-        function save() {
-            localStorage.setItem('transactions', JSON.stringify(transactions));
         }
 
         function render() {
@@ -206,26 +220,32 @@
                 emptyState.classList.remove('hidden');
             } else {
                 emptyState.classList.add('hidden');
-                filtered.forEach((t, index) => {
+                filtered.forEach((t) => {
                     const realIndex = transactions.indexOf(t);
                     const total = t.qty * t.price;
                     const row = document.createElement('tr');
-                    row.className = "hover:bg-purple-50/50 transition-colors duration-200 animate-fade-in";
+                    row.className = "hover:bg-slate-50 transition-colors group";
                     row.innerHTML = `
-                        <td class="px-6 py-4 text-sm text-gray-500">${t.date}</td>
-                        <td class="px-6 py-4 font-semibold text-gray-800">${t.customer}</td>
-                        <td class="px-6 py-4 font-medium">${t.product}</td>
-                        <td class="px-6 py-4 text-center">
-                            <span class="px-3 py-1 rounded-full text-xs font-bold ${t.category === 'Baju' ? 'bg-blue-100 text-blue-600' : 'bg-orange-100 text-orange-600'}">
-                                ${t.category}
-                            </span>
+                        <td class="px-6 py-5">
+                            <span class="text-xs font-bold text-slate-400 block">${t.date}</span>
+                            <span class="text-[10px] bg-slate-100 px-2 py-0.5 rounded font-bold text-slate-500 uppercase">${t.id}</span>
                         </td>
-                        <td class="px-6 py-4 text-center font-bold text-gray-600">${t.qty}</td>
-                        <td class="px-6 py-4">${rupiah(t.price)}</td>
-                        <td class="px-6 py-4 font-bold text-purple-700">${rupiah(total)}</td>
-                        <td class="px-6 py-4 text-center">
-                            <button onclick="deleteTransaction(${realIndex})" class="text-red-400 hover:text-red-600 transition-colors p-2">
-                                <i class="fas fa-trash-alt"></i>
+                        <td class="px-6 py-5">
+                            <div class="flex items-center gap-3">
+                                <div class="h-10 w-10 rounded-xl ${t.category === 'Baju' ? 'bg-indigo-50 text-indigo-600' : 'bg-amber-50 text-amber-600'} flex items-center justify-center font-bold">
+                                    ${t.category[0]}
+                                </div>
+                                <div>
+                                    <p class="text-sm font-bold text-slate-800 leading-tight">${t.product}</p>
+                                    <p class="text-xs text-slate-500">${t.customer}</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-5 text-center font-bold text-slate-700 text-sm">x${t.qty}</td>
+                        <td class="px-6 py-5 font-bold text-indigo-600 text-sm">${rupiah(total)}</td>
+                        <td class="px-6 py-5 text-center">
+                            <button onclick="deleteTransaction(${realIndex})" class="h-8 w-8 rounded-lg text-slate-300 hover:bg-red-50 hover:text-red-500 transition-all">
+                                <i class="fas fa-trash-can text-sm"></i>
                             </button>
                         </td>
                     `;
@@ -233,60 +253,63 @@
                 });
             }
 
-            // Update Stats
+            // Real-time calculation
             const totalRevenue = transactions.reduce((a, b) => a + (b.qty * b.price), 0);
             document.getElementById('revenue').innerText = rupiah(totalRevenue);
-            document.getElementById('transactions-count').innerText = transactions.length;
-            document.getElementById('average').innerText = rupiah(transactions.length ? totalRevenue / transactions.length : 0);
-            save();
+            document.getElementById('transactions-count').innerHTML = `${transactions.length} <span class="text-sm font-medium text-slate-400">Order</span>`;
+            document.getElementById('average').innerText = rupiah(transactions.length ? Math.round(totalRevenue / transactions.length) : 0);
+            
+            localStorage.setItem('transactions', JSON.stringify(transactions));
         }
 
         function addTransaction() {
-            const customerEl = document.getElementById('customer');
-            const productEl = document.getElementById('product');
-            const categoryEl = document.getElementById('category');
-            const qtyEl = document.getElementById('qty');
-            const priceEl = document.getElementById('price');
+            const inputs = {
+                customer: document.getElementById('customer'),
+                product: document.getElementById('product'),
+                category: document.getElementById('category'),
+                qty: document.getElementById('qty'),
+                price: document.getElementById('price')
+            };
 
-            if (!customerEl.value || !productEl.value || !categoryEl.value || !qtyEl.value || !priceEl.value) {
-                alert('Harap lengkapi semua data transaksi!');
+            if (!inputs.customer.value || !inputs.product.value || !inputs.category.value || !inputs.qty.value || !inputs.price.value) {
+                alert('Tolong isi semua data dengan benar.');
                 return;
             }
 
+            const newId = 'TRX-' + Math.floor(1000 + Math.random() * 9000);
+
             transactions.unshift({
-                date: new Date().toLocaleDateString('id-ID', { day:'2-digit', month:'short', year:'numeric' }),
-                customer: customerEl.value,
-                product: productEl.value,
-                category: categoryEl.value,
-                qty: Number(qtyEl.value),
-                price: Number(priceEl.value)
+                id: newId,
+                date: new Date().toLocaleDateString('id-ID', { day:'2-digit', month:'short' }),
+                customer: inputs.customer.value,
+                product: inputs.product.value,
+                category: inputs.category.value,
+                qty: Number(inputs.qty.value),
+                price: Number(inputs.price.value)
             });
 
-            // Reset Form
-            customerEl.value = ''; productEl.value = ''; categoryEl.value = '';
-            qtyEl.value = ''; priceEl.value = '';
-
+            // Reset
+            Object.values(inputs).forEach(i => i.value = '');
             render();
-            showToast('Transaksi berhasil dicatat!');
+            showToast('Transaksi ' + newId + ' berhasil disimpan!');
         }
 
         function deleteTransaction(index) {
-            if (confirm('Hapus transaksi ini?')) {
+            if (confirm('Hapus transaksi ini dari database?')) {
                 transactions.splice(index, 1);
                 render();
-                showToast('Transaksi telah dihapus');
+                showToast('Data berhasil dihapus');
             }
         }
 
         function resetData() {
-            if (confirm('Hapus semua data permanen?')) {
+            if (confirm('PERINGATAN: Hapus seluruh riwayat transaksi?')) {
                 transactions = [];
                 render();
-                showToast('Seluruh data berhasil direset');
+                showToast('Database telah dibersihkan');
             }
         }
 
-        // Jalankan render pertama kali
         render();
     </script>
 </body>
