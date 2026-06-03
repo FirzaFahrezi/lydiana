@@ -4,339 +4,189 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Fashion Sales Management System</title>
-
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:'Segoe UI',sans-serif;
-}
-
-body{
-    background:#F3F4F6;
-    padding:20px;
-}
-
-.container{
-    max-width:1400px;
-    margin:auto;
-}
-
-.header{
-    text-align:center;
-    margin-bottom:25px;
-}
-
-.header h1{
-    color:#1E3A8A;
-    font-size:32px;
-}
-
-.header p{
-    color:#666;
-    margin-top:5px;
-}
-
-.stats{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-    gap:20px;
-    margin-bottom:25px;
-}
-
-.card{
-    background:white;
-    border-radius:15px;
-    padding:20px;
-    box-shadow:0 4px 15px rgba(0,0,0,.1);
-}
-
-.card h3{
-    color:#555;
-    margin-bottom:10px;
-}
-
-.card h2{
-    color:#7C3AED;
-}
-
-.form-box{
-    background:white;
-    padding:25px;
-    border-radius:15px;
-    box-shadow:0 4px 15px rgba(0,0,0,.1);
-    margin-bottom:25px;
-}
-
-.form-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-    gap:15px;
-}
-
-input,select{
-    width:100%;
-    padding:12px;
-    border:1px solid #ddd;
-    border-radius:10px;
-}
-
-.btn{
-    margin-top:20px;
-    background:#1E3A8A;
-    color:white;
-    border:none;
-    padding:12px 20px;
-    border-radius:10px;
-    cursor:pointer;
-}
-
-.btn:hover{
-    opacity:.9;
-}
-
-.table-box{
-    background:white;
-    padding:20px;
-    border-radius:15px;
-    box-shadow:0 4px 15px rgba(0,0,0,.1);
-    overflow-x:auto;
-}
-
-table{
-    width:100%;
-    border-collapse:collapse;
-}
-
-th{
-    background:#1E3A8A;
-    color:white;
-}
-
-th,td{
-    padding:12px;
-    border:1px solid #ddd;
-    text-align:center;
-}
-
-.delete-btn{
-    background:#dc2626;
-    color:white;
-    border:none;
-    padding:8px 12px;
-    border-radius:8px;
-    cursor:pointer;
-}
-
-.success{
-    background:#dcfce7;
-    color:#166534;
-    padding:10px;
-    border-radius:10px;
-    margin-bottom:15px;
-    display:none;
-}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Poppins,sans-serif;background:linear-gradient(135deg,#1E3A8A,#7C3AED);min-height:100vh;padding:20px}
+.container{max-width:1400px;margin:auto}
+.header{text-align:center;color:#fff;margin-bottom:25px}
+.header h1{font-size:2.2rem}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px;margin-bottom:25px}
+.card,.form-box,.table-box{background:#fff;border-radius:20px;box-shadow:0 10px 25px rgba(0,0,0,.15)}
+.card{padding:25px;transition:.3s}
+.card:hover{transform:translateY(-4px)}
+.card i{font-size:30px;color:#7C3AED;margin-bottom:10px}
+.card h3{color:#666}
+.card h2{color:#1E3A8A;margin-top:10px}
+.form-box,.table-box{padding:25px}
+.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px}
+input,select{padding:12px;border:1px solid #ddd;border-radius:12px;width:100%}
+input:focus,select:focus{outline:none;border-color:#7C3AED}
+.btn{background:linear-gradient(135deg,#1E3A8A,#7C3AED);color:#fff;border:none;padding:12px 18px;border-radius:12px;cursor:pointer;font-weight:600}
+.btn-danger{background:#dc2626}
+.actions{display:flex;gap:10px;margin-top:15px;flex-wrap:wrap}
+.table-box{overflow:auto}
+table{width:100%;border-collapse:collapse}
+th,td{padding:12px;border:1px solid #eee;text-align:center}
+th{background:#1E3A8A;color:#fff;position:sticky;top:0}
+.toast{display:none;background:#dcfce7;color:#166534;padding:12px;border-radius:12px;margin-bottom:15px}
+.search{margin-bottom:15px}
+.empty{padding:20px;color:#777}
 </style>
 </head>
 <body>
-
 <div class="container">
-
 <div class="header">
 <h1>Fashion Sales Management System</h1>
 <p>Kelola transaksi penjualan baju, celana, jaket, sepatu, dan aksesoris fashion dengan mudah.</p>
 </div>
 
-<div id="message" class="success"></div>
+<div id="toast" class="toast"></div>
 
 <div class="stats">
-<div class="card">
-<h3>Total Pendapatan</h3>
-<h2 id="revenue">Rp 0</h2>
-</div>
-
-<div class="card">
-<h3>Jumlah Transaksi</h3>
-<h2 id="transactions">0</h2>
-</div>
-
-<div class="card">
-<h3>Rata-rata Transaksi</h3>
-<h2 id="average">Rp 0</h2>
-</div>
+<div class="card"><i class="fa-solid fa-wallet"></i><h3>Total Pendapatan</h3><h2 id="revenue">Rp0</h2></div>
+<div class="card"><i class="fa-solid fa-cart-shopping"></i><h3>Jumlah Transaksi</h3><h2 id="transactions">0</h2></div>
+<div class="card"><i class="fa-solid fa-chart-line"></i><h3>Rata-rata Transaksi</h3><h2 id="average">Rp0</h2></div>
 </div>
 
 <div class="form-box">
-
-<h2 style="margin-bottom:15px;">Tambah Transaksi</h2>
-
+<h2>Tambah Transaksi</h2><br>
 <div class="form-grid">
-
-<input type="text" id="customer" placeholder="Nama Pelanggan">
-
-<input type="text" id="product" placeholder="Nama Produk">
-
+<input id="customer" placeholder="Nama Pelanggan">
+<input id="product" placeholder="Nama Produk">
 <select id="category">
 <option value="">Pilih Kategori</option>
-<option>Baju</option>
-<option>Celana</option>
+<option>Baju</option><option>Celana</option><option>Jaket</option><option>Sepatu</option><option>Aksesoris</option>
 </select>
-
-<input type="number" id="qty" placeholder="Jumlah">
-
-<input type="number" id="price" placeholder="Harga Satuan">
-
+<select id="size">
+<option value="">Pilih Ukuran</option>
+<option>XS</option><option>S</option><option>M</option><option>L</option><option>XL</option><option>XXL</option>
+</select>
+<input id="qty" type="number" placeholder="Jumlah">
+<input id="price" type="number" placeholder="Harga Satuan">
+</div>
+<div class="actions">
+<button class="btn" onclick="addTransaction()">+ Tambah Transaksi</button>
+<button class="btn btn-danger" onclick="resetData()">Reset Data</button>
+</div>
 </div>
 
-<button class="btn" onclick="addTransaction()">
-+ Tambah Transaksi
-</button>
-
-</div>
+<br>
 
 <div class="table-box">
-
-<h2 style="margin-bottom:15px;">Riwayat Transaksi</h2>
-
+<input class="search" id="search" placeholder="Cari pelanggan atau produk..." onkeyup="render()">
 <table>
-
 <thead>
 <tr>
-<th>Tanggal</th>
-<th>Pelanggan</th>
-<th>Produk</th>
-<th>Kategori</th>
-<th>Qty</th>
-<th>Harga</th>
-<th>Total</th>
-<th>Aksi</th>
+<th>Tanggal</th><th>Pelanggan</th><th>Produk</th><th>Kategori</th><th>Ukuran</th><th>Qty</th><th>Harga</th><th>Total</th><th>Aksi</th>
 </tr>
 </thead>
-
 <tbody id="tableBody"></tbody>
-
 </table>
-
 </div>
-
 </div>
 
 <script>
+let transactions = JSON.parse(localStorage.getItem('transactions')) || [
+{date:new Date().toLocaleDateString('id-ID'),customer:'Andi',product:'Jaket Hoodie',category:'Jaket',size:'L',qty:2,price:250000},
+{date:new Date().toLocaleDateString('id-ID'),customer:'Rina',product:'Sepatu Casual',category:'Sepatu',size:'XL',qty:1,price:450000}
+];
 
-function rupiah(number){
-return new Intl.NumberFormat('id-ID',{
-style:'currency',
-currency:'IDR'
-}).format(number);
+const rupiah=n=>new Intl.NumberFormat('id-ID',{style:'currency',currency:'IDR'}).format(n);
+
+function toast(msg){
+const t=document.getElementById('toast');
+t.innerText=msg;t.style.display='block';
+setTimeout(()=>t.style.display='none',3000);
 }
 
-function saveData(){
+function save(){
 localStorage.setItem('transactions',JSON.stringify(transactions));
 }
 
-function showMessage(text){
-const msg=document.getElementById('message');
-msg.innerText=text;
-msg.style.display='block';
+function render(){
+let body=document.getElementById('tableBody');
+let q=document.getElementById('search').value.toLowerCase();
+body.innerHTML='';
+let revenue=0;
+let filtered=transactions.filter(x=>
+x.customer.toLowerCase().includes(q)||x.product.toLowerCase().includes(q)
+);
 
-setTimeout(()=>{
-msg.style.display='none';
-},3000);
+if(filtered.length===0){
+body.innerHTML='<tr><td colspan="9" class="empty">📦 Belum ada transaksi</td></tr>';
 }
 
-function render(){
-
-let tbody=document.getElementById('tableBody');
-tbody.innerHTML='';
-
-let revenue=0;
-
-transactions.forEach((item,index)=>{
-
-let total=item.qty*item.price;
+filtered.forEach((t,i)=>{
+let total=t.qty*t.price;
 revenue+=total;
-
-tbody.innerHTML+=`
-<tr>
-<td>${item.date}</td>
-<td>${item.customer}</td>
-<td>${item.product}</td>
-<td>${item.category}</td>
-<td>${item.qty}</td>
-<td>${rupiah(item.price)}</td>
+body.innerHTML+=`<tr>
+<td>${t.date}</td>
+<td>${t.customer}</td>
+<td>${t.product}</td>
+<td>${t.category}</td>
+<td>${t.size}</td>
+<td>${t.qty}</td>
+<td>${rupiah(t.price)}</td>
 <td>${rupiah(total)}</td>
-<td>
-<button class="delete-btn"
-onclick="deleteTransaction(${index})">
-🗑 Hapus
-</button>
-</td>
-</tr>
-`;
-
+<td><button class="btn btn-danger" onclick="deleteTransaction(${transactions.indexOf(t)})">Hapus</button></td>
+</tr>`;
 });
 
-document.getElementById('revenue').innerText=rupiah(revenue);
+let totalRevenue=transactions.reduce((a,b)=>a+(b.qty*b.price),0);
+document.getElementById('revenue').innerText=rupiah(totalRevenue);
 document.getElementById('transactions').innerText=transactions.length;
-
-let avg=transactions.length
-? revenue/transactions.length
-:0;
-
-document.getElementById('average').innerText=rupiah(avg);
-
-saveData();
+document.getElementById('average').innerText=rupiah(transactions.length?totalRevenue/transactions.length:0);
+save();
 }
 
 function addTransaction(){
+let customer=customerEl.value.trim();
+let product=productEl.value.trim();
+let category=categoryEl.value;
+let size=sizeEl.value;
+let qty=qtyEl.value;
+let price=priceEl.value;
 
-let customer=document.getElementById('customer').value;
-let product=document.getElementById('product').value;
-let category=document.getElementById('category').value;
-let qty=document.getElementById('qty').value;
-let price=document.getElementById('price').value;
-
-if(!customer || !product || !category || !size || !qty || !price){
+if(!customer||!product||!category||!size||!qty||!price){
 alert('Semua field wajib diisi');
 return;
 }
 
 transactions.push({
-date:new Date().toLocaleDateString(),
-customer,
-product,
-category,
-qty:Number(qty),
-price:Number(price)
+date:new Date().toLocaleDateString('id-ID'),
+customer,product,category,size,
+qty:Number(qty),price:Number(price)
 });
 
-render();
-
-document.getElementById('customer').value='';
-document.getElementById('product').value='';
-document.getElementById('category').value='';
-document.getElementById('qty').value='';
-document.getElementById('price').value='';
-
-showMessage('Transaksi berhasil ditambahkan');
+customerEl.value='';productEl.value='';categoryEl.value='';
+sizeEl.value='';qtyEl.value='';priceEl.value='';
+render();toast('Transaksi berhasil ditambahkan');
 }
 
-function deleteTransaction(index){
-
+function deleteTransaction(i){
 if(confirm('Apakah Anda yakin ingin menghapus transaksi ini?')){
-
-transactions.splice(index,1);
-
-render();
-
-showMessage('Data berhasil dihapus');
+transactions.splice(i,1);
+render();toast('Data berhasil dihapus');
 }
 }
 
-render();
+function resetData(){
+if(confirm('Hapus semua transaksi?')){
+transactions=[];render();toast('Semua data berhasil dihapus');
+}
+}
 
+const customerEl=document.getElementById('customer');
+const productEl=document.getElementById('product');
+const categoryEl=document.getElementById('category');
+const sizeEl=document.getElementById('size');
+const qtyEl=document.getElementById('qty');
+const priceEl=document.getElementById('price');
+
+render();
 </script>
-
 </body>
 </html>
