@@ -58,11 +58,7 @@ th{background:#1E3A8A;color:#fff;position:sticky;top:0}
 <input id="product" placeholder="Nama Produk">
 <select id="category">
 <option value="">Pilih Kategori</option>
-<option>Baju</option><option>Celana</option><option>Jaket</option><option>Sepatu</option><option>Aksesoris</option>
-</select>
-<select id="size">
-<option value="">Pilih Ukuran</option>
-<option>XS</option><option>S</option><option>M</option><option>L</option><option>XL</option><option>XXL</option>
+<option>Baju</option><option>Celana</option>
 </select>
 <input id="qty" type="number" placeholder="Jumlah">
 <input id="price" type="number" placeholder="Harga Satuan">
@@ -80,7 +76,7 @@ th{background:#1E3A8A;color:#fff;position:sticky;top:0}
 <table>
 <thead>
 <tr>
-<th>Tanggal</th><th>Pelanggan</th><th>Produk</th><th>Kategori</th><th>Ukuran</th><th>Qty</th><th>Harga</th><th>Total</th><th>Aksi</th>
+<th>Tanggal</th><th>Pelanggan</th><th>Produk</th><th>Kategori</th><th>Qty</th><th>Harga</th><th>Total</th><th>Aksi</th>
 </tr>
 </thead>
 <tbody id="tableBody"></tbody>
@@ -122,7 +118,6 @@ body.innerHTML+=`<tr>
 <td>${t.customer}</td>
 <td>${t.product}</td>
 <td>${t.category}</td>
-<td>${t.size}</td>
 <td>${t.qty}</td>
 <td>${rupiah(t.price)}</td>
 <td>${rupiah(total)}</td>
@@ -141,23 +136,22 @@ function addTransaction(){
 let customer=customerEl.value.trim();
 let product=productEl.value.trim();
 let category=categoryEl.value;
-let size=sizeEl.value;
 let qty=qtyEl.value;
 let price=priceEl.value;
 
-if(!customer||!product||!category||!size||!qty||!price){
+if(!customer||!product||!category||!qty||!price){
 alert('Semua field wajib diisi');
 return;
 }
 
 transactions.push({
 date:new Date().toLocaleDateString('id-ID'),
-customer,product,category,size,
+customer,product,category,
 qty:Number(qty),price:Number(price)
 });
 
 customerEl.value='';productEl.value='';categoryEl.value='';
-sizeEl.value='';qtyEl.value='';priceEl.value='';
+qtyEl.value='';priceEl.value='';
 render();toast('Transaksi berhasil ditambahkan');
 }
 
@@ -177,7 +171,6 @@ transactions=[];render();toast('Semua data berhasil dihapus');
 const customerEl=document.getElementById('customer');
 const productEl=document.getElementById('product');
 const categoryEl=document.getElementById('category');
-const sizeEl=document.getElementById('size');
 const qtyEl=document.getElementById('qty');
 const priceEl=document.getElementById('price');
 
