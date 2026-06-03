@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fashion Sales Management System</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+    background:#F3F4F6;
+    padding:20px;
+}
+
+.container{
+    max-width:1400px;
+    margin:auto;
+}
+
+.header{
+    text-align:center;
+    margin-bottom:25px;
+}
+
+.header h1{
+    color:#1E3A8A;
+    font-size:32px;
+}
+
+.header p{
+    color:#666;
+    margin-top:5px;
+}
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:20px;
+    margin-bottom:25px;
+}
+
+.card{
+    background:white;
+    border-radius:15px;
+    padding:20px;
+    box-shadow:0 4px 15px rgba(0,0,0,.1);
+}
+
+.card h3{
+    color:#555;
+    margin-bottom:10px;
+}
+
+.card h2{
+    color:#7C3AED;
+}
+
+.form-box{
+    background:white;
+    padding:25px;
+    border-radius:15px;
+    box-shadow:0 4px 15px rgba(0,0,0,.1);
+    margin-bottom:25px;
+}
+
+.form-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:15px;
+}
+
+input,select{
+    width:100%;
+    padding:12px;
+    border:1px solid #ddd;
+    border-radius:10px;
+}
+
+.btn{
+    margin-top:20px;
+    background:#1E3A8A;
+    color:white;
+    border:none;
+    padding:12px 20px;
+    border-radius:10px;
+    cursor:pointer;
+}
+
+.btn:hover{
+    opacity:.9;
+}
+
+.table-box{
+    background:white;
+    padding:20px;
+    border-radius:15px;
+    box-shadow:0 4px 15px rgba(0,0,0,.1);
+    overflow-x:auto;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th{
+    background:#1E3A8A;
+    color:white;
+}
+
+th,td{
+    padding:12px;
+    border:1px solid #ddd;
+    text-align:center;
+}
+
+.delete-btn{
+    background:#dc2626;
+    color:white;
+    border:none;
+    padding:8px 12px;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+.success{
+    background:#dcfce7;
+    color:#166534;
+    padding:10px;
+    border-radius:10px;
+    margin-bottom:15px;
+    display:none;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<div class="header">
+<h1>Fashion Sales Management System</h1>
+<p>Kelola transaksi penjualan baju, celana, jaket, sepatu, dan aksesoris fashion dengan mudah.</p>
+</div>
+
+<div id="message" class="success"></div>
+
+<div class="stats">
+<div class="card">
+<h3>Total Pendapatan</h3>
+<h2 id="revenue">Rp 0</h2>
+</div>
+
+<div class="card">
+<h3>Jumlah Transaksi</h3>
+<h2 id="transactions">0</h2>
+</div>
+
+<div class="card">
+<h3>Rata-rata Transaksi</h3>
+<h2 id="average">Rp 0</h2>
+</div>
+</div>
+
+<div class="form-box">
+
+<h2 style="margin-bottom:15px;">Tambah Transaksi</h2>
+
+<div class="form-grid">
+
+<input type="text" id="customer" placeholder="Nama Pelanggan">
+
+<input type="text" id="product" placeholder="Nama Produk">
+
+<select id="category">
+<option value="">Pilih Kategori</option>
+<option>Baju</option>
+<option>Celana</option>
+<option>Jaket</option>
+<option>Sepatu</option>
+<option>Aksesoris</option>
+</select>
+
+<select id="size">
+<option value="">Pilih Ukuran</option>
+<option>XS</option>
+<option>S</option>
+<option>M</option>
+<option>L</option>
+<option>XL</option>
+<option>XXL</option>
+</select>
+
+<input type="number" id="qty" placeholder="Jumlah">
+
+<input type="number" id="price" placeholder="Harga Satuan">
+
+</div>
+
+<button class="btn" onclick="addTransaction()">
++ Tambah Transaksi
+</button>
+
+</div>
+
+<div class="table-box">
+
+<h2 style="margin-bottom:15px;">Riwayat Transaksi</h2>
+
+<table>
+
+<thead>
+<tr>
+<th>Tanggal</th>
+<th>Pelanggan</th>
+<th>Produk</th>
+<th>Kategori</th>
+<th>Ukuran</th>
+<th>Qty</th>
+<th>Harga</th>
+<th>Total</th>
+<th>Aksi</th>
+</tr>
+</thead>
+
+<tbody id="tableBody"></tbody>
+
+</table>
+
+</div>
+
+</div>
+
+<script>
+
+let transactions = JSON.parse(localStorage.getItem('transactions')) || [
+{
+date:new Date().toLocaleDateString(),
+customer:'Andi',
+product:'Jaket Hoodie',
+category:'Jaket',
+size:'L',
+qty:2,
+price:250000
+},
+{
+date:new Date().toLocaleDateString(),
+customer:'Rina',
+product:'Sepatu Casual',
+category:'Sepatu',
+size:'39',
+qty:1,
+price:450000
+}
+];
+
+function rupiah(number){
+return new Intl.NumberFormat('id-ID',{
+style:'currency',
+currency:'IDR'
+}).format(number);
+}
+
+function saveData(){
+localStorage.setItem('transactions',JSON.stringify(transactions));
+}
+
+function showMessage(text){
+const msg=document.getElementById('message');
+msg.innerText=text;
+msg.style.display='block';
+
+setTimeout(()=>{
+msg.style.display='none';
+},3000);
+}
+
+function render(){
+
+let tbody=document.getElementById('tableBody');
+tbody.innerHTML='';
+
+let revenue=0;
+
+transactions.forEach((item,index)=>{
+
+let total=item.qty*item.price;
+revenue+=total;
+
+tbody.innerHTML+=`
+<tr>
+<td>${item.date}</td>
+<td>${item.customer}</td>
+<td>${item.product}</td>
+<td>${item.category}</td>
+<td>${item.size}</td>
+<td>${item.qty}</td>
+<td>${rupiah(item.price)}</td>
+<td>${rupiah(total)}</td>
+<td>
+<button class="delete-btn"
+onclick="deleteTransaction(${index})">
+🗑 Hapus
+</button>
+</td>
+</tr>
+`;
+
+});
+
+document.getElementById('revenue').innerText=rupiah(revenue);
+document.getElementById('transactions').innerText=transactions.length;
+
+let avg=transactions.length
+? revenue/transactions.length
+:0;
+
+document.getElementById('average').innerText=rupiah(avg);
+
+saveData();
+}
+
+function addTransaction(){
+
+let customer=document.getElementById('customer').value;
+let product=document.getElementById('product').value;
+let category=document.getElementById('category').value;
+let size=document.getElementById('size').value;
+let qty=document.getElementById('qty').value;
+let price=document.getElementById('price').value;
+
+if(!customer || !product || !category || !size || !qty || !price){
+alert('Semua field wajib diisi');
+return;
+}
+
+transactions.push({
+date:new Date().toLocaleDateString(),
+customer,
+product,
+category,
+size,
+qty:Number(qty),
+price:Number(price)
+});
+
+render();
+
+document.getElementById('customer').value='';
+document.getElementById('product').value='';
+document.getElementById('category').value='';
+document.getElementById('size').value='';
+document.getElementById('qty').value='';
+document.getElementById('price').value='';
+
+showMessage('Transaksi berhasil ditambahkan');
+}
+
+function deleteTransaction(index){
+
+if(confirm('Apakah Anda yakin ingin menghapus transaksi ini?')){
+
+transactions.splice(index,1);
+
+render();
+
+showMessage('Data berhasil dihapus');
+}
+}
+
+render();
+
+</script>
+
+</body>
+</html>
