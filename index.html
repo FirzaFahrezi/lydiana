@@ -11,32 +11,34 @@
     <style>
         body { 
             font-family: 'Plus Jakarta Sans', sans-serif; 
-            background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+            background: #f8fafc;
         }
         .card-system {
             background: white;
             border: 1px solid #eef2f6;
-            border-radius: 20px;
+            border-radius: 24px;
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.04);
-            transition: all 0.3s ease;
         }
-        .card-system:hover {
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05);
-        }
-        /* Hide Spinners */
+        /* Menghilangkan tombol panah pada input angka */
         input::-webkit-outer-spin-button,
-        input::-webkit-inner-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-        }
+        input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
         input[type=number] { -moz-appearance: textfield; }
         
-        /* Custom Input Focus */
-        .input-premium {
-            @apply w-full px-5 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-sm transition-all duration-200 outline-none;
+        /* Gaya Input Modern */
+        .input-group {
+            @apply relative flex items-center;
         }
-        .input-premium:focus {
+        .input-group i {
+            @apply absolute left-4 text-slate-400 text-sm transition-colors;
+        }
+        .input-control {
+            @apply w-full pl-11 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-sm transition-all outline-none font-medium;
+        }
+        .input-control:focus {
             @apply bg-white border-indigo-500 ring-4 ring-indigo-500/10;
+        }
+        .input-control:focus + i {
+            @apply text-indigo-500;
         }
 
         .custom-scroll::-webkit-scrollbar { height: 6px; }
@@ -44,150 +46,155 @@
         .custom-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
     </style>
 </head>
-<body class="p-4 md:p-10 text-slate-800 border-t-[6px] border-indigo-600 min-h-screen">
+<body class="p-4 md:p-10 text-slate-800 min-h-screen">
 
-    <div class="max-w-6xl mx-auto space-y-8">
+    <div class="max-w-6xl mx-auto space-y-10">
         
-        <!-- HEADER SECTION -->
+        <!-- HEADER -->
         <div class="flex flex-col md:flex-row justify-between items-center gap-6">
             <div class="text-center md:text-left">
-                <div class="flex items-center justify-center md:justify-start gap-3 mb-1">
-                    <div class="bg-indigo-600 text-white p-2 rounded-xl shadow-lg shadow-indigo-200">
-                        <i class="fa-solid fa-store text-xl"></i>
-                    </div>
-                    <h1 class="text-4xl font-extrabold text-slate-900 tracking-tighter">Lydiana <span class="text-indigo-600">Thrifting</span></h1>
-                </div>
-                <p class="text-slate-400 font-medium text-sm ml-1">Dashboard Finansial & Pencatatan Digital</p>
+                <h1 class="text-4xl font-extrabold text-slate-900 tracking-tighter italic">LYDIANA <span class="text-indigo-600 not-italic">THRIFTING.</span></h1>
+                <p class="text-slate-400 font-medium text-sm mt-1">Sistem Manajemen Penjualan & Analisis Pendapatan</p>
             </div>
-            <div class="flex items-center gap-3 bg-white px-6 py-3 rounded-2xl border border-slate-200 shadow-sm">
-                <div class="h-2 w-2 bg-emerald-500 rounded-full animate-pulse"></div>
-                <span id="current-date" class="text-xs font-bold text-slate-600 tracking-wide uppercase"></span>
+            <div class="bg-white px-6 py-3 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-3">
+                <div class="p-2 bg-indigo-50 rounded-lg text-indigo-600"><i class="fa-solid fa-calendar-day"></i></div>
+                <span id="current-date" class="text-xs font-bold text-slate-600 uppercase tracking-widest text-center"></span>
             </div>
         </div>
 
         <!-- STATS OVERVIEW -->
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
-            <div class="card-system p-7 relative overflow-hidden group">
-                <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:scale-125 transition-transform duration-500 text-indigo-600">
-                    <i class="fa-solid fa-wallet text-6xl"></i>
-                </div>
-                <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.15em] mb-2">Total Pendapatan</p>
-                <h3 id="revenue" class="text-3xl font-black text-slate-900 tracking-tight">Rp0</h3>
+            <div class="card-system p-8 bg-indigo-600 text-white relative overflow-hidden">
+                <p class="text-xs font-bold text-indigo-200 uppercase tracking-[0.2em] mb-2">Total Pendapatan</p>
+                <h3 id="revenue" class="text-3xl font-black tracking-tight relative z-10">Rp0</h3>
+                <i class="fa-solid fa-wallet absolute -right-4 -bottom-4 text-8xl opacity-10"></i>
             </div>
-            <div class="card-system p-7 relative overflow-hidden group">
-                <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:scale-125 transition-transform duration-500 text-slate-900">
-                    <i class="fa-solid fa-box-open text-6xl"></i>
-                </div>
-                <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.15em] mb-2">Barang Terjual</p>
-                <h3 id="total-qty" class="text-3xl font-black text-slate-900 tracking-tight">0 <span class="text-sm text-slate-400 font-semibold tracking-normal uppercase">Pcs</span></h3>
+            <div class="card-system p-8">
+                <p class="text-xs font-bold text-slate-400 uppercase tracking-[0.2em] mb-2">Barang Terjual</p>
+                <h3 id="total-qty" class="text-3xl font-black text-slate-800 tracking-tight">0 <span class="text-sm text-slate-300 font-bold tracking-normal uppercase">Pcs</span></h3>
             </div>
-            <div class="card-system p-7 border-indigo-100 bg-indigo-50/20 relative overflow-hidden group">
-                <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:scale-125 transition-transform duration-500 text-indigo-600">
-                    <i class="fa-solid fa-chart-line text-6xl"></i>
-                </div>
-                <p class="text-[10px] font-black text-indigo-400 uppercase tracking-[0.15em] mb-2">Rata-Rata Transaksi</p>
-                <h3 id="average-value" class="text-3xl font-black text-indigo-600 tracking-tight">Rp0</h3>
+            <div class="card-system p-8">
+                <p class="text-xs font-bold text-slate-400 uppercase tracking-[0.2em] mb-2">Rata-Rata Transaksi</p>
+                <h3 id="average-value" class="text-3xl font-black text-slate-800 tracking-tight">Rp0</h3>
             </div>
         </div>
 
-        <!-- FORM INPUT -->
-        <div class="card-system p-8 space-y-8">
-            <div class="flex items-center gap-3">
-                <h2 class="font-extrabold text-xl text-slate-800 tracking-tight">Entri Transaksi</h2>
-                <div class="h-px flex-1 bg-slate-100"></div>
+        <!-- FORM ENTRY TRANSAKSI (THE NEW DESIGN) -->
+        <div class="card-system overflow-hidden">
+            <div class="bg-slate-900 p-6 flex items-center gap-3">
+                <div class="h-10 w-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-indigo-500/20">
+                    <i class="fa-solid fa-cash-register text-lg"></i>
+                </div>
+                <div>
+                    <h2 class="font-bold text-white tracking-wide">Entry Transaksi Baru</h2>
+                    <p class="text-slate-400 text-[10px] uppercase font-bold tracking-widest">Lengkapi detail di bawah ini</p>
+                </div>
             </div>
 
-            <div class="space-y-6">
-                <div class="w-full md:w-1/2">
-                    <label class="text-[11px] font-extrabold text-slate-400 uppercase tracking-widest mb-2 block ml-1">Nama Pelanggan</label>
-                    <input id="customer" type="text" placeholder="Ketik nama pembeli..." class="input-premium">
+            <div class="p-8 space-y-8">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                    <!-- Sisi Kiri: Identitas -->
+                    <div class="lg:col-span-4 space-y-4">
+                        <div class="bg-indigo-50/50 p-6 rounded-3xl border border-indigo-100/50">
+                            <label class="text-[11px] font-black text-indigo-400 uppercase tracking-[0.2em] mb-3 block">Identitas Pelanggan</label>
+                            <div class="input-group">
+                                <input id="customer" type="text" placeholder="Masukkan nama pembeli..." class="input-control border-none shadow-sm shadow-indigo-100">
+                                <i class="fa-solid fa-user"></i>
+                            </div>
+                            <p class="text-[10px] text-indigo-300 mt-3 font-medium italic">* Pastikan nama sesuai untuk mempermudah pencarian.</p>
+                        </div>
+                    </div>
+
+                    <!-- Sisi Kanan: Detail Barang -->
+                    <div class="lg:col-span-8">
+                        <label class="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4 block ml-1">Informasi Detail Pembelian</label>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                            <div class="input-group">
+                                <input id="product" type="text" placeholder="Nama Produk (ex: Jaket Vintage)" class="input-control">
+                                <i class="fa-solid fa-tag"></i>
+                            </div>
+                            <div class="input-group">
+                                <select id="category" class="input-control cursor-pointer appearance-none">
+                                    <option value="">Pilih Kategori Produk</option>
+                                    <option>Baju</option>
+                                    <option>Celana</option>
+                                </select>
+                                <i class="fa-solid fa-layer-group"></i>
+                            </div>
+                            <div class="input-group">
+                                <input id="qty" type="number" placeholder="Jumlah (Qty)" class="input-control">
+                                <i class="fa-solid fa-cubes"></i>
+                            </div>
+                            <div class="input-group">
+                                <input id="price" type="number" placeholder="Harga Satuan (Rp)" class="input-control font-bold text-indigo-600">
+                                <i class="fa-solid fa-rupiah-sign"></i>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-5">
-                    <div class="md:col-span-1">
-                        <label class="text-[11px] font-extrabold text-slate-400 uppercase tracking-widest mb-2 block ml-1">Nama Produk</label>
-                        <input id="product" type="text" placeholder="Jaket, Baju, dll..." class="input-premium">
-                    </div>
-                    <div>
-                        <label class="text-[11px] font-extrabold text-slate-400 uppercase tracking-widest mb-2 block ml-1">Kategori</label>
-                        <select id="category" class="input-premium bg-white cursor-pointer">
-                            <option value="">Pilih Kategori</option>
-                            <option>Baju</option>
-                            <option>Celana</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="text-[11px] font-extrabold text-slate-400 uppercase tracking-widest mb-2 block ml-1 text-center">Qty</label>
-                        <input id="qty" type="number" placeholder="0" class="input-premium text-center font-bold">
-                    </div>
-                    <div>
-                        <label class="text-[11px] font-extrabold text-slate-400 uppercase tracking-widest mb-2 block ml-1">Harga Satuan (Rp)</label>
-                        <input id="price" type="number" placeholder="50000" class="input-premium font-bold text-indigo-600">
-                    </div>
-                </div>
-
-                <div class="pt-6">
-                    <button onclick="addTransaction()" class="w-full md:w-auto px-12 py-4 bg-slate-900 hover:bg-indigo-600 text-white font-bold rounded-2xl transition-all shadow-xl shadow-slate-200 flex items-center justify-center gap-4 active:scale-95 group text-sm tracking-widest uppercase">
-                        <i class="fa-solid fa-plus-circle group-hover:rotate-90 transition-transform duration-300"></i>
-                        Simpan Transaksi
+                <!-- Tombol Simpan -->
+                <div class="pt-6 border-t border-slate-100 flex justify-center md:justify-start">
+                    <button onclick="addTransaction()" class="w-full md:w-auto px-16 py-4 bg-indigo-600 hover:bg-slate-900 text-white font-black rounded-2xl transition-all shadow-xl shadow-indigo-200 flex items-center justify-center gap-4 active:scale-95 group tracking-widest text-xs">
+                        <i class="fa-solid fa-paper-plane group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"></i>
+                        SIMPAN TRANSAKSI KE DATABASE
                     </button>
                 </div>
             </div>
         </div>
 
-        <!-- DATA TABLE -->
+        <!-- RIWAYAT TRANSAKSI -->
         <div class="card-system overflow-hidden">
-            <div class="p-8 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="p-8 border-b border-slate-100 flex flex-col md:flex-row justify-between items-center gap-6 bg-slate-50/50">
                 <div class="flex items-center gap-3">
-                    <div class="h-8 w-1 bg-indigo-600 rounded-full"></div>
-                    <h2 class="font-extrabold text-slate-800 tracking-tight">Riwayat Penjualan</h2>
+                    <h2 class="font-extrabold text-slate-800 tracking-tight flex items-center gap-2 uppercase text-sm italic">
+                        <i class="fa-solid fa-list-check text-slate-400 not-italic"></i> Data Penjualan Terakhir
+                    </h2>
                 </div>
                 <div class="relative w-full md:w-80">
-                    <i class="fa-solid fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 text-xs"></i>
-                    <input id="search" onkeyup="render()" type="text" placeholder="Cari nama atau produk..." class="w-full pl-11 pr-5 py-3 bg-slate-50 border border-slate-100 rounded-full text-xs outline-none focus:ring-4 focus:ring-indigo-500/5 focus:bg-white transition-all">
+                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 text-xs"></i>
+                    <input id="search" onkeyup="render()" type="text" placeholder="Cari data..." class="w-full pl-11 pr-5 py-3 bg-white border border-slate-200 rounded-full text-xs outline-none focus:ring-4 focus:ring-indigo-500/5 transition-all shadow-sm">
                 </div>
             </div>
 
-            <div class="overflow-x-auto custom-scroll px-2">
+            <div class="overflow-x-auto custom-scroll">
                 <table class="w-full text-left whitespace-nowrap">
                     <thead>
-                        <tr class="text-[10px] uppercase tracking-[0.2em] text-slate-400 font-extrabold bg-slate-50/50">
+                        <tr class="text-[10px] uppercase tracking-[0.2em] text-slate-400 font-extrabold bg-white border-b border-slate-100">
                             <th class="px-8 py-5 text-center">Waktu</th>
                             <th class="px-8 py-5">Pelanggan</th>
                             <th class="px-8 py-5">Produk</th>
                             <th class="px-8 py-5 text-center">Kategori</th>
                             <th class="px-8 py-5 text-center">Qty</th>
-                            <th class="px-8 py-5 text-right">Harga</th>
-                            <th class="px-8 py-5 text-right">Total</th>
+                            <th class="px-8 py-5 text-right">Hrg Satuan</th>
+                            <th class="px-8 py-5 text-right">Total Akhir</th>
                             <th class="px-8 py-5 text-center">Aksi</th>
                         </tr>
                     </thead>
-                    <tbody id="tableBody" class="text-sm divide-y divide-slate-50">
+                    <tbody id="tableBody" class="text-sm divide-y divide-slate-100">
                         <!-- Content via JS -->
                     </tbody>
                 </table>
             </div>
 
-            <div id="emptyState" class="hidden py-32 text-center">
-                <div class="bg-slate-50 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <i class="fa-solid fa-box-open text-slate-200 text-3xl"></i>
-                </div>
-                <p class="text-slate-400 font-bold tracking-widest uppercase text-[10px]">Data Belum Tersedia</p>
+            <div id="emptyState" class="hidden py-32 text-center bg-white">
+                <i class="fa-solid fa-inbox text-slate-100 text-8xl mb-4"></i>
+                <p class="text-slate-400 font-bold tracking-widest uppercase text-[10px]">Database Transaksi Kosong</p>
             </div>
 
-            <div class="p-6 bg-slate-50/30 flex justify-center md:justify-end border-t border-slate-50">
+            <div class="p-6 bg-slate-50 flex justify-center md:justify-end">
                 <button onclick="resetData()" class="text-[10px] text-slate-300 hover:text-red-500 font-extrabold transition-all uppercase tracking-[0.2em] flex items-center gap-2">
-                    <i class="fa-solid fa-trash-can"></i> Hapus Database
+                    <i class="fa-solid fa-trash-can"></i> Bersihkan Semua Data
                 </button>
             </div>
         </div>
     </div>
 
     <!-- NOTIF TOAST -->
-    <div id="toast" class="fixed bottom-10 left-1/2 -translate-x-1/2 z-50 transform translate-y-20 opacity-0 transition-all duration-500">
-        <div class="bg-slate-900 text-white px-8 py-4 rounded-full shadow-2xl flex items-center gap-4">
-            <i class="fa-solid fa-check-circle text-emerald-400"></i>
-            <span id="toast-msg" class="text-xs font-bold tracking-[0.1em] uppercase"></span>
+    <div id="toast" class="fixed top-10 left-1/2 -translate-x-1/2 z-50 transform -translate-y-20 opacity-0 transition-all duration-500">
+        <div class="bg-slate-900 text-white px-8 py-4 rounded-full shadow-2xl flex items-center gap-4 border border-slate-700">
+            <i class="fa-solid fa-circle-check text-emerald-400"></i>
+            <span id="toast-msg" class="text-xs font-black tracking-widest uppercase"></span>
         </div>
     </div>
 
@@ -201,8 +208,8 @@
         function showToast(msg) {
             const toast = document.getElementById('toast');
             document.getElementById('toast-msg').innerText = msg;
-            toast.classList.remove('translate-y-20', 'opacity-0');
-            setTimeout(() => toast.classList.add('translate-y-20', 'opacity-0'), 3000);
+            toast.classList.remove('-translate-y-20', 'opacity-0');
+            setTimeout(() => toast.classList.add('-translate-y-20', 'opacity-0'), 3000);
         }
 
         function render() {
@@ -223,21 +230,19 @@
                     const realIndex = transactions.indexOf(t);
                     const total = t.qty * t.price;
                     const row = document.createElement('tr');
-                    row.className = "hover:bg-indigo-50/20 transition-all duration-200 group";
+                    row.className = "hover:bg-indigo-50/20 transition-all duration-200";
                     row.innerHTML = `
                         <td class="px-8 py-6 text-[10px] font-bold text-slate-400 text-center uppercase tracking-wider">${t.date}</td>
-                        <td class="px-8 py-6">
-                            <span class="font-extrabold text-slate-800 block">${t.customer}</span>
-                        </td>
-                        <td class="px-8 py-6 text-slate-500 font-medium">${t.product}</td>
+                        <td class="px-8 py-6"><span class="font-extrabold text-slate-800">${t.customer}</span></td>
+                        <td class="px-8 py-6 text-slate-600 font-medium">${t.product}</td>
                         <td class="px-8 py-6 text-center">
-                            <span class="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${t.category === 'Baju' ? 'bg-indigo-50 text-indigo-600' : 'bg-amber-50 text-amber-600'}">
+                            <span class="px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest ${t.category === 'Baju' ? 'bg-indigo-50 text-indigo-600 border border-indigo-100' : 'bg-amber-50 text-amber-600 border border-amber-100'}">
                                 ${t.category}
                             </span>
                         </td>
-                        <td class="px-8 py-6 text-center font-bold text-slate-700">x${t.qty}</td>
+                        <td class="px-8 py-6 text-center font-bold text-slate-700 underline decoration-slate-200 underline-offset-4">x${t.qty}</td>
                         <td class="px-8 py-6 text-right text-slate-400 font-semibold text-xs">${rupiah(t.price)}</td>
-                        <td class="px-8 py-6 text-right font-black text-slate-900 text-base">${rupiah(total)}</td>
+                        <td class="px-8 py-6 text-right font-black text-indigo-600 text-base italic">${rupiah(total)}</td>
                         <td class="px-8 py-6 text-center">
                             <button onclick="deleteTransaction(${realIndex})" class="w-9 h-9 rounded-xl text-slate-200 hover:bg-red-50 hover:text-red-500 transition-all flex items-center justify-center mx-auto">
                                 <i class="fas fa-trash-can text-sm"></i>
@@ -248,7 +253,6 @@
                 });
             }
 
-            // Calculations
             const totalRevenue = transactions.reduce((a, b) => a + (b.qty * b.price), 0);
             const totalQty = transactions.reduce((a, b) => a + Number(b.qty), 0);
             const averageValue = transactions.length ? Math.round(totalRevenue / transactions.length) : 0;
@@ -261,16 +265,17 @@
         }
 
         function addTransaction() {
-            const inputs = ['customer', 'product', 'category', 'qty', 'price'];
-            const vals = {};
-            
-            for(let id of inputs) {
-                const el = document.getElementById(id);
-                if(!el.value) {
-                    alert('Harap lengkapi semua kolom!');
-                    return;
-                }
-                vals[id] = el.value;
+            const inputs = {
+                customer: document.getElementById('customer'),
+                product: document.getElementById('product'),
+                category: document.getElementById('category'),
+                qty: document.getElementById('qty'),
+                price: document.getElementById('price')
+            };
+
+            if (!inputs.customer.value || !inputs.product.value || !inputs.category.value || !inputs.qty.value || !inputs.price.value) {
+                showToast('❌ Gagal: Mohon lengkapi semua data');
+                return;
             }
 
             const now = new Date();
@@ -278,36 +283,35 @@
 
             transactions.unshift({
                 date: timeStr,
-                customer: vals.customer,
-                product: vals.product,
-                category: vals.category,
-                qty: Number(vals.qty),
-                price: Number(vals.price)
+                customer: inputs.customer.value,
+                product: inputs.product.value,
+                category: inputs.category.value,
+                qty: Number(inputs.qty.value),
+                price: Number(inputs.price.value)
             });
 
-            inputs.forEach(id => document.getElementById(id).value = '');
+            Object.values(inputs).forEach(el => el.value = '');
             
             render();
-            showToast('Berhasil Disimpan');
+            showToast('✅ Berhasil: Transaksi telah dicatat');
         }
 
         function deleteTransaction(index) {
-            if (confirm('Hapus transaksi ini?')) {
+            if (confirm('Konfirmasi: Ingin menghapus catatan ini?')) {
                 transactions.splice(index, 1);
                 render();
-                showToast('Data Dihapus');
+                showToast('🗑️ Data telah dihapus');
             }
         }
 
         function resetData() {
-            if (confirm('Hapus semua data database?')) {
+            if (confirm('BAHAYA: Seluruh database akan dibersihkan. Lanjutkan?')) {
                 transactions = [];
                 render();
-                showToast('Database Bersih');
+                showToast('♻️ Database telah direset');
             }
         }
 
-        // Set Current Date
         document.getElementById('current-date').innerText = new Date().toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
 
         render();
